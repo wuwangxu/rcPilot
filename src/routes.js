@@ -15,6 +15,7 @@ import ReposView from './components/views/Repos.vue'
 const routes = [
   {
     path: '/login',
+    name: 'login',
     component: LoginView
   },
   {
@@ -26,37 +27,37 @@ const routes = [
         alias: '',
         component: DashboardView,
         name: 'Dashboard',
-        meta: {description: 'Overview of environment'}
+        meta: {description: 'Overview of environment', /*requiresAuth: true*/}
       }, {
         path: 'tables',
         component: TablesView,
         name: 'Tables',
-        meta: {description: 'Simple and advance table in CoPilot'}
+        meta: {description: 'Simple and advance table in CoPilot',/* requiresAuth: true */}
       }, {
         path: 'tasks',
         component: TasksView,
         name: 'Tasks',
-        meta: {description: 'Tasks page in the form of a timeline'}
+        meta: {description: 'Tasks page in the form of a timeline', /* requiresAuth: true */}
       }, {
         path: 'setting',
         component: SettingView,
         name: 'Settings',
-        meta: {description: 'User settings page'}
+        meta: {description: 'User settings page', /* requiresAuth: true */}
       }, {
         path: 'access',
         component: AccessView,
         name: 'Access',
-        meta: {description: 'Example of using maps'}
+        meta: {description: 'Example of using maps', /* requiresAuth: true* /}
       }, {
         path: 'server',
         component: ServerView,
         name: 'Servers',
-        meta: {description: 'List of our servers', requiresAuth: true}
+        meta: {description: 'List of our servers', /* requiresAuth: true */}
       }, {
         path: 'repos',
         component: ReposView,
         name: 'Repository',
-        meta: {description: 'List of popular javascript repos'}
+        meta: {description: 'List of popular javascript repos', /* requiresAuth: true   */}
       }
     ]
   }, {

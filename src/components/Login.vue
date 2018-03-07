@@ -1,10 +1,9 @@
 <template>
   <div id="login">
     <img src="/static/img/logo.png" class="center-block logo">
-
     <div class="text-center col-sm-12">
       <!-- login form -->
-      <form @submit.prevent="checkCreds">
+      <form >
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
           <input class="form-control" name="username" placeholder="Username" type="text" v-model="username">
@@ -14,7 +13,7 @@
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
         </div>
-        <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Submit</button>
+        <a v-bind:class="'btn btn-primary btn-lg ' + loading" @click="toLogin">登 录</a>
       </form>
 
       <!-- errors -->
@@ -28,75 +27,118 @@ import api from '../api'
 
 export default {
   name: 'Login',
-  data(router) {
+  data() {
     return {
-      section: 'Login',
+//      section: 'Login',
       loading: '',
       username: '',
       password: '',
       response: ''
     }
   },
-  methods: {
-    checkCreds() {
-      const { username, password } = this
-
-      this.toggleLoading()
-      this.resetResponse()
-      this.$store.commit('TOGGLE_LOADING')
-
-      /* Making API call to authenticate a user */
-      api
-        .request('post', '/login', { username, password })
-        .then(response => {
-          this.toggleLoading()
-
-          var data = response.data
-          /* Checking if error object was returned from the server */
-          if (data.error) {
-            var errorName = data.error.name
-            if (errorName) {
-              this.response =
-                errorName === 'InvalidCredentialsError'
-                  ? 'Username/Password incorrect. Please try again.'
-                  : errorName
-            } else {
-              this.response = data.error
-            }
-
-            return
-          }
-
-          /* Setting user in the state and caching record to the localStorage */
-          if (data.user) {
-            var token = 'Bearer ' + data.token
-
-            this.$store.commit('SET_USER', data.user)
-            this.$store.commit('SET_TOKEN', token)
-
-            if (window.localStorage) {
-              window.localStorage.setItem('user', JSON.stringify(data.user))
-              window.localStorage.setItem('token', token)
-            }
-
-            this.$router.push(data.redirect ? data.redirect : '/')
-          }
-        })
-        .catch(error => {
-          this.$store.commit('TOGGLE_LOADING')
-          console.log(error)
-
-          this.response = 'Server appears to be offline'
-          this.toggleLoading()
-        })
-    },
-    toggleLoading() {
-      this.loading = this.loading === '' ? 'loading' : ''
-    },
-    resetResponse() {
-      this.response = ''
-    }
-  }
+//  methods: {
+//    toLogin() {
+//      let that = this
+//      let formData = new FormData()
+//      formData.append('username', this.username)
+//      formData.append('password', this.password)
+//      formData.append('userType', 1)
+//      const loading = this.$loading({
+//        lock: true,
+//        text: '登录中...',
+//        spinner: 'el-icon-loading',
+//        background: 'rgba(0, 0, 0, 0.7)'
+//      })
+//      sessionStorage.clear()
+//      this.axios.post(this.globalUrl + 'auth/login', formData, {
+//        headers: {
+//          'Content-Type': 'application/x-www-form-urlencoded'
+//        }
+//      }).then(function (res) {
+//        loading.close()
+//        if (res.data.code === 200) {
+//          let token = res.data.data
+//          let realtoken = 'Bearer ' + token
+//          // 保存这个token值
+//          sessionStorage.setItem('username', that.username)
+//          sessionStorage.setItem('token', realtoken)
+//          that.$router.push({
+//            'path': '/'
+//          })
+//        } else {
+//          that.$notify({
+//            title: '登录失败',
+//            message: '用户名或密码错误！',
+//            type: 'warning'
+//          })
+//        }
+//      }).catch(function (err) {
+//        loading.close()
+//        that.$notify({
+//          title: '登录异常',
+//          message: '网络连接失败',
+//          type: 'error'
+//        })
+//      })
+//
+////    checkCreds() {
+////      const {username, password} = this
+////      this.toggleLoading()
+////      this.resetResponse()
+////      this.$store.commit('TOGGLE_LOADING')
+////
+////      /* Making API call to authenticate a user */
+////      api
+////        .request('post', '/login', {username, password})
+////        .then(response => {
+////          this.toggleLoading()
+////          var data = response.data
+////          /* Checking if error object was returned from the server */
+////          if (data.error) {
+////            var errorName = data.error.name
+////            if (errorName) {
+////              this.response =
+////                errorName === 'InvalidCredentialsError'
+////                  ? 'Username/Password incorrect. Please try again.'
+////                  : errorName
+////            } else {
+////              this.response = data.error
+////            }
+////
+////            return
+////          }
+////
+////          /* Setting user in the state and caching record to the localStorage */
+////          if (data.user) {
+////            var token = 'Bearer ' + data.token
+////
+////            this.$store.commit('SET_USER', data.user)
+////            this.$store.commit('SET_TOKEN', token)
+////
+////            if (window.localStorage) {
+////              window.localStorage.setItem('user', JSON.stringify(data.user))
+////              window.localStorage.setItem('token', token)
+////            }
+////
+////            this.$router.push(data.redirect ? data.redirect : '/')
+////          }
+////        })
+////        .catch(error => {
+////          this.$store.commit('TOGGLE_LOADING')
+////          console.log(error)
+////
+////          this.response = 'Server appears to be offline'
+////          this.toggleLoading()
+////        })
+////    },
+////    toggleLoading() {
+////      this.loading = this.loading === '' ? 'loading' : ''
+////    },
+////    resetResponse() {
+////      this.response = ''
+////    }
+//    }
+//  }
 }
 </script>
 

@@ -15,6 +15,19 @@ import { domain, count, prettyDate, pluralize } from './filters'
 // Import Views - Top level
 import AppView from './components/App.vue'
 
+// ElementUI
+import ElementUI from 'element-ui' /*   js   */
+import 'element-ui/lib/theme-chalk/index.css'   /*   css   */
+Vue.use(ElementUI)  /*   使用框架  */
+
+// Axios
+import axios from 'axios'
+Vue.prototype.axios = axios  /*   this.axios  */
+
+// 引入url
+const preUrl = require('../config/url')
+Vue.prototype.globalUrl = preUrl.interfaceUrl
+
 // Import Install and register helper items
 Vue.filter('count', count)
 Vue.filter('domain', domain)
@@ -40,12 +53,33 @@ router.beforeEach((to, from, next) => {
     // if not, redirect to login page.
     window.console.log('Not authenticated')
     next({
-      path: '/login',
-      query: { redirect: to.fullPath }
+      // path: '/login',
+      // query: { redirect: to.fullPath }
     })
   } else {
     next()
   }
+   // 获取登录状态
+  // function isLogin() {
+  //   return sessionStorage.getItem('token')   /* 获取token值 */
+  // }
+  // // 跳转前判断
+  // let _null = null
+  // if (to.meta.requiresAuth && isLogin() === _null) {  /* 如果需要登陆并且登陆内容为空 */
+  //   router.push({
+  //     // 'path': '/login'
+  //   })
+  // } else {
+  //   next()
+  // }
+  // // 如果要跳转到登录
+  // if (to.name === 'login') {    /* 如果当前页面是登陆页面 */
+  //   if (isLogin() !== _null) {   /* 登陆内容不为空 */
+  //     router.push({      /* 自动跳转到首页 */
+  //       'path': '/'
+  //     })
+  //   }
+  // }
 })
 
 sync(store, router)
