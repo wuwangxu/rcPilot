@@ -1,5 +1,32 @@
 <template>
   <ul class="sidebar-menu">
+    <li class="header">WangXuAdd</li>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>OS</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+          <router-link tag="li" class="pageLink" to="/servertables">
+          <a href="#">
+            <i class="fa fa-file-word-o"></i> 服务器
+          </a>
+          </router-link>
+        </li>
+        <li>
+          <router-link tag="li" class="pageLink" to="/">
+          <a href="#">
+            <i class="fa fa-file-picture-o"></i> 操作系统
+          </a>
+          </router-link>
+        </li>
+      </ul>
+    </li>
+
     <li class="header">TOOLS</li>
     <router-link tag="li" class="pageLink" to="/">
       <a>
