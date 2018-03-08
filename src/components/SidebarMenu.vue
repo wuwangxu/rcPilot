@@ -11,18 +11,20 @@
       </a>
       <ul class="treeview-menu">
         <li>
-          <router-link tag="li" class="pageLink" to="/servertables">
+
           <a href="#">
-            <i class="fa fa-file-word-o"></i> 服务器
+            <router-link tag="li" class="pageLink" to="/ostables">
+            <i class="fa fa-circle"></i> 操作系统
+            </router-link>
           </a>
-          </router-link>
+
         </li>
         <li>
-          <router-link tag="li" class="pageLink" to="/">
           <a href="#">
-            <i class="fa fa-file-picture-o"></i> 操作系统
+            <router-link tag="li" class="pageLink" to="/servertables">
+            <i class="fa fa-file-picture-o"></i> 服务器
+            </router-link>
           </a>
-          </router-link>
         </li>
       </ul>
     </li>

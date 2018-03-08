@@ -10,6 +10,7 @@ import SettingView from './components/views/Setting.vue'
 import AccessView from './components/views/Access.vue'
 import ServerView from './components/views/Server.vue'
 import ReposView from './components/views/Repos.vue'
+import OsTablesView from './components/views/OsTables'
 import ServerTablesView from './components/views/ServerTables'
 
 // Routes
@@ -35,10 +36,15 @@ const routes = [
         name: 'Tables',
         meta: {description: 'Simple and advance table in CoPilot', requiresAuth: true }
       }, {
+        path: 'ostables',
+        component: OsTablesView,
+        name: 'OsTables',
+        meta: {description: 'Os table in CoPilot', requiresAuth: true }
+      },{
         path: 'servertables',
         component: ServerTablesView,
-        name: 'ServerTables',
-        meta: {description: 'Server table in CoPilot', requiresAuth: true }
+        name: 'serverTables',
+        meta: {description: 'Os table in CoPilot', requiresAuth: true }
       }, {
         path: 'tasks',
         component: TasksView,
