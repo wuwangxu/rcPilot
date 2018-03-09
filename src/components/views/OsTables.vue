@@ -34,9 +34,9 @@
                 <td>{{item.name}}</td>
                 <td>{{item.businessId}}</td>
                 <td>{{item.createBy}}</td>
-                <td>{{item.createDate}}</td>
+                <td>{{formatDate(item.createDate)}}</td>
                 <td>{{item.updateBy}}</td>
-                <td>{{item.updateDate}}</td>
+                <td>{{formatDate(item.updateDate)}}</td>
                 <td>{{item.flag}}</td>
                 <td>{{item.remarks}}</td>
                 <td>{{item.delFlag}}</td>
@@ -310,6 +310,9 @@
           } , res=>{
           console.log(res)
           this.tableData=res.rows
+          // console.log(this.pilot.transTime(this.tableData[0].createDate,2))
+          // console.log(this.tableData[0])
+
           this.pages=Math.ceil(res.total/this.pageSize)
           loading.close()
           },err=>{
@@ -496,6 +499,11 @@
           this.pageNu -=1;
           this.getData();
         }
+      },
+      //date数据转换
+      formatDate:function (date) {
+        // return this.pilot.formatDateString(date);
+        return  this.pilot.transTime(date,2)
       }
 
     }
