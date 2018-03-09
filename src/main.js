@@ -20,6 +20,8 @@ import ElementUI from 'element-ui' /*   js   */
 import 'element-ui/lib/theme-chalk/index.css'   /*   css   */
 Vue.use(ElementUI)  /*   使用框架  */
 
+import pilot from '../build/Piloturl'
+Vue.prototype.pilot = pilot
 // Axios
 import axios from 'axios'
 Vue.prototype.axios = axios  /*   this.axios  */
@@ -48,38 +50,39 @@ var router = new VueRouter({
 
 // Some middleware to help us ensure the user is authenticated.
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth) && (!router.app.$store.state.token || router.app.$store.state.token === 'null')) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    window.console.log('Not authenticated')
-    next({
-      // path: '/login',
-      // query: { redirect: to.fullPath }
-    })
-  } else {
-    next()
-  }
-   // 获取登录状态
-  // function isLogin() {
-  //   return sessionStorage.getItem('token')   /* 获取token值 */
-  // }
-  // // 跳转前判断
-  // let _null = null
-  // if (to.meta.requiresAuth && isLogin() === _null) {  /* 如果需要登陆并且登陆内容为空 */
-  //   router.push({
-  //     // 'path': '/login'
+  // if (to.matched.some(record => record.meta.requiresAuth) && (!router.app.$store.state.token || router.app.$store.state.token === 'null')) {
+  //   // this route requires auth, check if logged in
+  //   // if not, redirect to login page.
+  //   window.console.log('Not authenticated')
+  //   next({
+  //     // path: '/login',
+  //     // query: { redirect: to.fullPath }
   //   })
   // } else {
   //   next()
   // }
-  // // 如果要跳转到登录
-  // if (to.name === 'login') {    /* 如果当前页面是登陆页面 */
-  //   if (isLogin() !== _null) {   /* 登陆内容不为空 */
-  //     router.push({      /* 自动跳转到首页 */
-  //       'path': '/'
-  //     })
-  //   }
-  // }
+
+   // 获取登录状态
+  function isLogin() {
+    return sessionStorage.getItem('token')   /* 获取token值 */
+  }
+  // 跳转前判断
+  let _null = null
+  if (to.meta.requiresAuth && isLogin() === _null) {  /* 如果需要登陆并且登陆内容为空 */
+    router.push({
+      'path': '/login'
+    })
+  } else {
+    next()
+  }
+  // 如果要跳转到登录
+  if (to.name === 'login') {    /* 如果当前页面是登陆页面 */
+    if (isLogin() !== _null) {   /* 登陆内容不为空 */
+      router.push({      /* 自动跳转到首页 */
+        'path': '/'
+      })
+    }
+  }
 })
 
 sync(store, router)

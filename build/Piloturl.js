@@ -84,7 +84,32 @@ module.exports={
     axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
     axios({
       method: 'get',
-      url: preUrl.interfaceUrl+url,
+      url: preUrl.interfaceUrl + url,
+      params: param
+    }).then(function (res) {
+      thenFun.call(this,res.data);
+    }).catch(function (error) {
+      exeFun.call(this,error);
+    });
+},
+
+  ajaxDeleteUtil (url,param,thenFun,exeFun){
+    axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
+    axios({
+      method: 'delete',
+      url: preUrl.interfaceUrl + url,
+      params: param
+    }).then(function (res) {
+      thenFun.call(this,res.data);
+    }).catch(function (error) {
+      exeFun.call(this,error);
+    });
+  },
+  ajaxPutUtil (url,param,thenFun,exeFun){
+    axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
+    axios({
+      method: 'put',
+      url: preUrl.interfaceUrl + url,
       params: param
     }).then(function (res) {
       thenFun.call(this,res.data);
