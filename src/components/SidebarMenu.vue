@@ -9,6 +9,35 @@
     </router-link>
 
 
+    <li class="header">WangXuAdd</li>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>OS</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+
+          <a href="#">
+            <router-link tag="li" class="pageLink" to="/ostables">
+            <i class="fa fa-circle"></i> 操作系统
+            </router-link>
+          </a>
+
+        </li>
+        <li>
+          <a href="#">
+            <router-link tag="li" class="pageLink" to="/servertables">
+            <i class="fa fa-file-picture-o"></i> 服务器
+            </router-link>
+          </a>
+        </li>
+      </ul>
+    </li>
+
     <li class="header">TOOLS</li>
     <router-link tag="li" class="pageLink" to="/">
       <a>

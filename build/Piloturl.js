@@ -60,7 +60,7 @@ module.exports={
    * @author: Breaker-93
    * @date: create on 2017-12-18 15:45:09
    */
-  ajaxPostUtil (url,param,thenFun,exeFun){
+    ajaxPostUtil (url,param,thenFun,exeFun){
     var _formData = formData(param);
     axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
     axios.post(preUrl.interfaceUrl+url,_formData).then(function (res) {
@@ -118,6 +118,50 @@ module.exports={
     });
   },
 
+  /**
+   * @description: 对axios的DELETE请求方法的封装（已加header）
+   * @param: url  -> String
+   * @param: param  -> 形如{param1:"",param2:""}
+   * @param: thenFun  -> 请求成功（200）的回调函数
+   * @param: exeFun  -> 请求失败（非200）的回调函数
+   * @return
+   * @author: Breaker-93
+   * @date: create on 2017-12-18 15:48:35
+   */
+  ajaxDeleteUtil (url,param,thenFun,exeFun){
+    axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
+    axios({
+      method: 'delete',
+      url: preUrl.interfaceUrl+url,
+      params: param
+    }).then(function (res) {
+      thenFun.call(this,res.data);
+    }).catch(function (error) {
+      exeFun.call(this,error);
+    });
+  },
+  /**
+   * @description: 对axios的PUT请求方法的封装（已加header）
+   * @param: url  -> String
+   * @param: param  -> 形如{param1:"",param2:""}
+   * @param: thenFun  -> 请求成功（200）的回调函数
+   * @param: exeFun  -> 请求失败（非200）的回调函数
+   * @return
+   * @author: Breaker-93
+   * @date: create on 2017-12-18 15:48:35
+   */
+  ajaxPutUtil (url,param,thenFun,exeFun){
+    axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
+    axios({
+      method: 'put',
+      url: preUrl.interfaceUrl+url,
+      params: param
+    }).then(function (res) {
+      thenFun.call(this,res.data);
+    }).catch(function (error) {
+      exeFun.call(this,error);
+    });
+  },
   /**
    * @description: 格式化日期
    * @param: date {Date}
