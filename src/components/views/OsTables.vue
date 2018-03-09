@@ -12,7 +12,7 @@
           </div>
           <!-- /.box-header -->
           <div class="box-body" style="height: 100%;">
-            <table id="example2" class="table table-bordered table-hover" style="">
+            <table id="example2" class="table table-bordered table-hover text-center" style="">
               <thead>
               <tr>
                 <th>操作系统编号</th>
@@ -24,7 +24,7 @@
                 <th>更新时间</th>
                 <th>启用状态</th>
                 <th>备注</th>
-                <th>删除</th>
+                <!--<th>删除</th>-->
                 <th>操作</th>
               </tr>
               </thead>
@@ -37,9 +37,11 @@
                 <td>{{formatDate(item.createDate)}}</td>
                 <td>{{item.updateBy}}</td>
                 <td>{{formatDate(item.updateDate)}}</td>
-                <td>{{item.flag}}</td>
+                <td><!--{{item.flag==1 ? ''}}-->
+                  <i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>
+                </td>
                 <td>{{item.remarks}}</td>
-                <td>{{item.delFlag}}</td>
+                <!--<td>{{item.delFlag}}</td>-->
                 <!--<td>{{item.isTop==='1'?'一级':'二级'}}</td>-->
                 <!--<td>{{item.remarks}}</td>-->
                 <td>

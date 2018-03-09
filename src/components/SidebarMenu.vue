@@ -22,10 +22,17 @@
         <li>
           <a href="#">
             <router-link tag="li" class="pageLink" to="/servertables">
-            <i class="fa fa-file-picture-o"></i> 服务器
+              <i class="fa fa-file-picture-o"></i> 服务器
             </router-link>
           </a>
         </li>
+        <li>
+        <a href="#">
+          <router-link tag="li" class="pageLink" to="/">
+            <i class="fa fa-file-picture-o"></i> table2
+          </router-link>
+        </a>
+      </li>
       </ul>
     </li>
 
