@@ -11,46 +11,131 @@
             </div>
           </div>
           <!-- /.box-header -->
-          <div class="box-body" style="height: 100%;">
-            <table id="example2" class="table table-bordered table-hover" style="">
-              <thead>
-              <tr>
-                <th>操作系统编号</th>
-                <th>操作系统名称</th>
-                <th>操作系统ID</th>
-                <th>创建者</th>
-                <th>创建时间</th>
-                <th>更新者</th>
-                <th>更新时间</th>
-                <th>启用状态</th>
-                <th>备注</th>
-                <th>删除</th>
-                <th>操作</th>
-              </tr>
-              </thead>
-              <tbody style="height:100%;">
-              <tr v-for="(item,index) in tableData">
-                <td>{{item.code}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.businessId}}</td>
-                <td>{{item.createBy}}</td>
-                <td>{{formatDate(item.createDate)}}</td>
-                <td>{{item.updateBy}}</td>
-                <td>{{formatDate(item.updateDate)}}</td>
-                <td>{{item.flag}}</td>
-                <td>{{item.remarks}}</td>
-                <td>{{item.delFlag}}</td>
-                <!--<td>{{item.isTop==='1'?'一级':'二级'}}</td>-->
-                <!--<td>{{item.remarks}}</td>-->
-                <td>
-                  <a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(item)" data-toggle="modal" data-target="#tableModal2"></a>
-                  <a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(item.businessId)"></a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+          <div class="box-body table-responsive" style="height: 100%;">
+            <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
 
-            <nav aria-label="Page navigation" class="pull-right nav-pageing">
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="left" inline class="demo-table-expand">
+                    <el-form-item label="服务器">
+                      <span>{{ formatCategory(props.row) }}</span>
+                    </el-form-item>
+                    <el-form-item label="所属系统">
+                      <span>{{ props.row.name }}</span>
+                    </el-form-item>
+                    <el-form-item label="品牌">
+                      <span>{{ props.row.brand }}</span>
+                    </el-form-item>
+                    <el-form-item label="CPU">
+                      <span>{{ props.row.cpu }}</span>
+                    </el-form-item>
+                    <el-form-item label="内存">
+                      <span>{{ props.row.memory }}</span>
+                    </el-form-item>
+                    <el-form-item label="硬盘">
+                      <span>{{ props.row.disk }}</span>
+                    </el-form-item>
+                    <el-form-item label="带宽">
+                      <span>{{ props.row.broadband }}</span>
+                    </el-form-item>
+                    <el-form-item label="内网IP">
+                      <span>{{ props.row.intranetIp }}</span>
+                    </el-form-item>
+                    <el-form-item label="外网IP">
+                      <span>{{ props.row.extranetIp }}</span>
+                    </el-form-item>
+                    <el-form-item label="服务器状态">
+                      <span>{{ props.row.status }}</span>
+                    </el-form-item>
+                    <el-form-item label="到期时间">
+                      <span>{{ formatDate(props.row.endTime) }}</span>
+                    </el-form-item>
+                    <el-form-item label="创建者">
+                      <span>{{ props.row.createBy }}</span>
+                    </el-form-item>
+                    <el-form-item label="更新者">
+                      <span>{{ props.row.updateBy }}</span>
+                    </el-form-item>
+                    <el-form-item label="更新时间">
+                      <span>{{ formatDate(props.row.updateDate) }}</span>
+                    </el-form-item>
+                    <el-form-item label="启用状态">
+                      <span>{{ props.row.flag }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="服务器"
+                prop="category"
+                :formatter="formatCategory"
+              >
+              </el-table-column>
+              <el-table-column
+                label="所属系统"
+                prop="name">
+              </el-table-column>
+              <el-table-column
+              label="状态"
+              prop="status">
+            </el-table-column>
+              <el-table-column
+                label="备注"
+                prop="remarks">
+              </el-table-column>
+              <!--<thead>-->
+              <!--<tr>-->
+                <!--<th>服务器</th>-->
+                <!--<th>所属系统</th>-->
+                <!--<th>品牌</th>-->
+                <!--<th>系统编号</th>-->
+                <!--<th>标签</th>-->
+                <!--<th>CPU</th>-->
+                <!--<th>内存</th>-->
+                <!--<th>硬盘</th>-->
+                <!--<th>带宽</th>-->
+                <!--<th>内网IP</th>-->
+                <!--<th>外网IP</th>-->
+                <!--<th>状态</th>-->
+                <!--<th>到期时间</th>-->
+                <!--<th>备注</th>-->
+                <!--<th>创建者</th>-->
+                <!--<th>更新者</th>-->
+                <!--<th>更新时间</th>-->
+                <!--<th>启用状态</th>-->
+                <!--&lt;!&ndash;<th>操作系统ID</th>&ndash;&gt;-->
+                <!--<th>操作</th>-->
+              <!--</tr>-->
+              <!--</thead>-->
+              <!--<tbody style="height:100%;">-->
+              <!--<tr v-for="(item,index) in tableData">-->
+                <!--<td v-if="item.category===0">讯达云</td><td v-else-if="item.category===1">华为云</td><td v-else-if="item.category===2">519服务器</td><td v-else>其他服务器</td>-->
+                <!--<td>{{item.name}}</td>-->
+                <!--<td>{{item.brand}}</td>-->
+                <!--<td>{{item.code}}</td>-->
+                <!--<td>{{item.tag}}</td>-->
+                <!--<td>{{item.cpu}}</td>-->
+                <!--<td>{{item.memory}}</td>-->
+                <!--<td>{{item.disk}}</td>-->
+                <!--<td>{{item.broadband}}</td>-->
+                <!--<td>{{item.intranetIp}}</td>-->
+                <!--<td>{{item.extranetIp}}</td>-->
+                <!--<td>{{item.status}}</td>-->
+                <!--<td>{{item.endTime}}</td>-->
+                <!--<td>{{item.remarks}}</td>-->
+                <!--<td>{{item.createBy}}</td>-->
+                <!--<td>{{item.updateBy}}</td>-->
+                <!--<td>{{item.updateDate}}</td>-->
+                <!--<td>{{item.flag}}</td>-->
+                <!--<td>-->
+                  <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(item)" data-toggle="modal" data-target="#tableModal2"></a>-->
+                  <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(item.businessId)"></a>-->
+                <!--</td>-->
+              <!--</tr>-->
+              <!--</tbody>-->
+            </el-table>
+
+            <nav aria-label="..." class="pull-right nav-pageing">
               <ul class="pagination">
                 <li class="page-item"
                     :class="{disabled:pageNu===1}"
@@ -240,9 +325,9 @@
         <!-- /.modal-dialog -->
       </div>
     </div>
-    <!--<div>-->
-      <!--获取来的数据：{{tableData}}-->
-    <!--</div>-->
+    <div>
+      获取来的数据：{{tableData}}
+    </div>
   </section>
 </template>
 
@@ -255,7 +340,7 @@
 
 
   export default {
-    name: "OsTables",
+    name: "ServerTables",
     data () {
       return {
         //   githubUrl: this.globalUrl+'/bos/queryBOsByPagination',
@@ -302,21 +387,18 @@
           spinner: 'el-icon-loading',
           background: 'rgba(255,255,255, 0.5)',
         });
-        this.pilot.ajaxGetUtil('/bos/queryBOsByPagination' ,{
+        this.pilot.ajaxGetUtil('bserver/queryBServerByPagination' ,{
           //params
           rows:this.pageSize,
           page:this.pageNu,
           // sort:'seq'
           } , res=>{
-          console.log(res)
-          this.tableData=res.rows
-          // console.log(this.pilot.transTime(this.tableData[0].createDate,2))
-          // console.log(this.tableData[0])
+          console.log(res.rows)
 
+          this.tableData=res.rows
           this.pages=Math.ceil(res.total/this.pageSize)
           loading.close()
           },err=>{
-            console.log(res)
           loading.close();
           this.$notify.error({
             title:'错误',
@@ -500,11 +582,29 @@
           this.getData();
         }
       },
+
+      //category数据转换
+      formatCategory: function (row, column) {
+        return row.category == 0 ? '讯达云' : row.category == 1 ? '华为云' : row.category == 2 ? '519服务器':'其他服务器';
+        // return this.categoryData[row.category];
+      },
       //date数据转换
       formatDate:function (date) {
         // return this.pilot.formatDateString(date);
         return  this.pilot.transTime(date,2)
+      },
+      //createDate转换
+      formatCreateDate:function (row,column) {
+        return this.formatDate(row.createDate)
+      },
+      //updateDate转换
+      formatCreateDate:function (row,column) {
+        return this.formatDate(row.updateDate)
       }
+
+
+    },
+    computed:{
 
     }
 
@@ -542,7 +642,16 @@
   form{
     padding: 0px;
   }
-  nav {
-    cursor: pointer;
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 30%;
   }
 </style>
