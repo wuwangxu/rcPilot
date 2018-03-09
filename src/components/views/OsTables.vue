@@ -39,6 +39,7 @@
                 <td>{{formatDate(item.updateDate)}}</td>
                 <td><!--{{item.flag==1 ? ''}}-->
                   <i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>
+
                 </td>
                 <td>{{item.remarks}}</td>
                 <!--<td>{{item.delFlag}}</td>-->
