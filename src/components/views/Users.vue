@@ -5,16 +5,17 @@
    <div class="col-md-12">
     <form class="navbar-form navbar-left">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="请输入姓名" v-model="search.name">
-        <input type="text" class="form-control" placeholder="请输入用户类型" v-model="search.utype">
-        <!--<el-select v-model="" placeholder="请选择">-->
-          <!--<el-option-->
-            <!--v-for="item in options"-->
-            <!--:key="item.value"-->
-            <!--:label="item.label"-->
-            <!--:value="item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
+
+        <el-select v-model="search.utype" placeholder="请选择用户类型" >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <input type="text" class="form-control" placeholder="请输入姓名" v-model="search.name" style="margin-top: -4px;border-radius: 5px">
+        <!--<input type="text" class="form-control" placeholder="请输入用户类型" v-model="search.utype">-->
       </div>
       <input type="button" class="btn btn-default" @click="SearchData" value="查询">
     </form>
@@ -26,10 +27,9 @@
     <!--表格-->
     <div class="row center-block">
       <div class="col-lg-12 col-md-12 col-sm-12">
-
         <el-table
           :data="tableData"
-          style="width: 100%">
+         >
           <!--<el-col :span="24">-->
           <el-table-column type="expand">
             <template slot-scope="props">
@@ -50,7 +50,7 @@
                   <span>{{ props.row.ucollege}}</span>
                 </el-form-item>
                 <el-form-item label="用户身份">
-                  <span>{{ props.row.role_id=='b'?'教师':'学生'}}</span>
+                  <span>{{ props.row.roleId=='b'?'教师':'学生'}}</span>
                 </el-form-item>
                 <el-form-item label="用户类型">
                   <span>{{ props.row.utype==0?'实习':(props.row.utype==1?'试用':(props.row.utype==2?'员工':'离职'))}}</span>
@@ -82,9 +82,9 @@
           </el-table-column>
           <el-table-column
             label="用户身份"
-            prop="role_id">
+            prop="roleId">
             <template slot-scope="props">
-              <span>{{props.row.role_id=='b'?'教师':'学生'}}</span>
+              <span>{{props.row.roleId=='b'?'教师':'学生'}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -156,6 +156,12 @@
                     <el-form-item label="姓名" prop="name">
                       <el-input v-model="tableForm.name"></el-input>
                     </el-form-item>
+                  <el-form-item label="登录名" prop="loginName">
+                    <el-input v-model="tableForm.loginName"></el-input>
+                  </el-form-item>
+                  <el-form-item label="密码" prop="password">
+                    <el-input v-model="tableForm.password"></el-input>
+                  </el-form-item>
 
                       <el-form-item label="性别">
                         <el-radio-group v-model="tableForm.sex">
@@ -165,7 +171,7 @@
                       </el-form-item>
 
                       <el-form-item label="用户身份">
-                        <el-radio-group v-model="tableForm.role_id">
+                        <el-radio-group v-model="tableForm.roleId">
                           <el-radio label="b" value="b">教师</el-radio>
                           <el-radio label="c" value="c">学生</el-radio>
                         </el-radio-group>
@@ -177,9 +183,9 @@
                     prop="email"
                     label="邮箱"
                     :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-    ]">
+                      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+                    ]">
                     <el-input v-model="tableForm.email"></el-input>
                   </el-form-item>
 
@@ -238,7 +244,7 @@
             <!-- Horizontal Form -->
             <div class="box box-info">
               <!-- form start -->
-              <el-form :model="tableForm"  :rules="rules" ref="tableForm" label-width="100px" class="demo-ruleForm">
+              <el-form :model="tableForm" :rules="rules" ref="tableForm" label-width="100px" class="demo-ruleForm">
                 <div class="box-body">
 
                   <el-form-item label="姓名" prop="name">
@@ -253,9 +259,9 @@
                   </el-form-item>
 
                   <el-form-item label="用户身份">
-                    <el-radio-group v-model="tableForm.role_id">
-                      <el-radio label="b" value="b">教师</el-radio>
-                      <el-radio label="c" value="c">学生</el-radio>
+                    <el-radio-group v-model="tableForm.roleId">
+                      <el-radio label="a" value="a">教师</el-radio>
+                      <el-radio label="b" value="b">学生</el-radio>
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item label="身份证号" prop="idNumber">
@@ -265,9 +271,9 @@
                     prop="email"
                     label="邮箱"
                     :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-    ]">
+                      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+                    ]">
                     <el-input v-model="tableForm.email"></el-input>
                   </el-form-item>
 
@@ -345,6 +351,11 @@
   .demo-table-expand label{
     width: 100px;
   }
+    .el-input__inner{
+      height: 34px !important;
+    }
+
+
 </style>
 
 <script>
@@ -402,31 +413,32 @@
         }, 1000);
       };
       return {
-//        options[{
-//          value:'0',
-//          lable:'实习'
-//        },{
-//          value:'1',
-//          lable:'试用'
-//        },{
-//          value:'2',
-//          lable:'员工'
-//        },{
-//          value:'3',
-//          lable:'离职'
-//        }],
-//        value:'',
+        options: [{
+          value: '0',
+          label: '实习'
+        }, {
+          value: '1',
+          label: '试用'
+        }, {
+          value: '2',
+          label: '员工'
+        }, {
+          value: '3',
+          label: '离职'
+        }],
         tableData: [],
         tableForm: {
           businessId:'',
           name: '',
-          role_id: 'b',
+          roleId: 'b',
           idNumber: '',
           sex: 0,
           email: '',
           phone: '',
           utype: 0,
-          uworkdate: ''
+          uworkdate: '',
+          loginName:'',
+          password:''
         },
         search:{
           name:'',
@@ -535,9 +547,11 @@
       },
 
       add(){
-        this.pilot.ajaxPostUtil('/bUser/add', {
+        this.pilot.ajaxPostUtil('/auth/register', {
+          loginName:this.tableForm.loginName,
+          password:this.tableForm.password,
             name: this.tableForm.name,
-          role_id: this.tableForm.role_id,
+          roleId: this.tableForm.roleId,
             sex: this.tableForm.sex,
             idNumber: this.tableForm.idNumber,
             phone: this.tableForm.phone,
@@ -548,7 +562,6 @@
           },res => {
             console.log(this.tableForm.uworkdate)
            if (res.code == 200){
-             alert('0');
              this.$notify.success({
                title : '提示',
                message : res.message,
@@ -556,14 +569,12 @@
              });
              // 清空表单
              this.resetForm();
-//             alert('1');
              $('#tableModal').modal('hide');
              this.getData();
            }else{
-//             alert('2');
              this.$notify.warning({
                title:'警告',
-               message:'保存失败',
+               message:res.message,
                duration:2000
              });
            }
@@ -581,24 +592,30 @@
         this.tableForm.email = item.email
         this.tableForm.utype = item.utype
         this.tableForm.ucollege = item.ucollege
-        this.tableForm.role_id = item.role_id
+        this.tableForm.roleId = item.roleId
         this.tableForm.idNumber = item.idNumber
         this.tableForm.uworkdate = item.uworkdate
+
+        console.log(item)
+
+        console.log(this.tableForm)
+
       },
       modify(){
         this.pilot.ajaxPutUtil('/bUser/alter/' + this.tableForm.businessId, {
           businessId:this.tableForm.businessId,
-           name: this.tableForm.name,
+          name: this.tableForm.name,
+          sex: this.tableForm.sex,
           phone: this.tableForm.phone,
           email: this.tableForm.email,
           utype: this.tableForm.utype,
           ucollege: this.tableForm.ucollege,
-          role_id: this.tableForm.role_id,
+          roleId: this.tableForm.roleId,
           idNumber: this.tableForm.idNumber,
           uworkdate: this.tableForm.uworkdate
 
           },res => {
-            console.log(this.tableForm.role_id)
+            console.log(this.tableForm.roleId)
           console.log(this.tableForm.uworkdate)
             if (res.code == 200){
               this.$notify.success({
@@ -625,7 +642,7 @@
       // 表单重置
       resetForm() {
         this.tableForm.name = '',
-        this.tableForm.role_id = 'b',
+        this.tableForm.roleId = 'b',
         this.tableForm.sex = 0,
         this.tableForm.phone = '',
         this.tableForm.email = '',
