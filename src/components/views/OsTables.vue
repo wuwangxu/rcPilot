@@ -132,13 +132,13 @@
                       <!--</div>-->
                     <!--</div>-->
                     <div class="form-group">
-                      <label for="code2" class="col-sm-2 control-label">操作系统编号</label>
+                      <label for="code1" class="col-sm-2 control-label">操作系统编号</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="code1" placeholder="请输入编号" v-model="tableForm.code">
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="name2" class="col-sm-2 control-label">操作系统名称</label>
+                      <label for="name1" class="col-sm-2 control-label">操作系统名称</label>
                       <div class="col-sm-10">
                         <input type="text" class="form-control" id="name1" placeholder="请输入名称" v-model="tableForm.name">
                       </div>
@@ -192,7 +192,7 @@
                       </div>
                     </div>
                     <div class="form-group">
-                    <label for="name2" class="col-sm-2 control-label">操作系统ID</label>
+                    <label for="businessId2" class="col-sm-2 control-label">操作系统ID</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control" id="businessId2" placeholder="请输入名称" v-model="tableForm.businessId" readonly>
                     </div>
