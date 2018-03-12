@@ -11,13 +11,13 @@
             </div>
           </div>
           <!-- /.box-header -->
-          <div class="box-body" style="height: 100%;">
-            <table id="example2" class="table table-bordered table-hover text-center" style="">
+          <div class="box-body table-responsive" style="height: 100%;">
+            <table id="example2" class="table table-bordered table-hover text-center" style="word-break:break-all; word-wrap:break-word;">
               <thead>
               <tr>
                 <th>操作系统编号</th>
                 <th>操作系统名称</th>
-                <th>操作系统ID</th>
+                <!--<th>操作系统ID</th>-->
                 <th>创建者</th>
                 <th>创建时间</th>
                 <th>更新者</th>
@@ -32,7 +32,7 @@
               <tr v-for="(item,index) in tableData">
                 <td>{{item.code}}</td>
                 <td>{{item.name}}</td>
-                <td>{{item.businessId}}</td>
+                <!--<td>{{item.businessId}}</td>-->
                 <td>{{item.createBy}}</td>
                 <td>{{formatDate(item.createDate)}}</td>
                 <td>{{item.updateBy}}</td>
