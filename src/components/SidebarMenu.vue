@@ -1,12 +1,25 @@
 <template>
   <ul class="sidebar-menu">
-    <li class="header">users</li>
-    <router-link tag="li" class="pageLink" to="/users">
-      <a>
-        <i class="fa fa-desktop"></i>
-        <span class="page">用户管理</span>
+    <li class="header">Users</li>
+    <li class="treeview">
+      <a href="#">
+        <i class="glyphicon glyphicon-user"></i>
+        <span>用户管理</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
       </a>
-    </router-link>
+      <ul class="treeview-menu">
+        <li>
+          <a href="#">
+          <router-link tag="li" class="pageLink" to="/users">
+            <i class="fa fa-file-word-o"></i> 用户信息
+          </router-link>
+          </a>
+        </li>
+      </ul>
+    </li>
+
 
 
     <li class="header">WangXuAdd</li>

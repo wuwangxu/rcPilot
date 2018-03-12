@@ -7,20 +7,30 @@
       <div class="form-group">
         <input type="text" class="form-control" placeholder="请输入姓名" v-model="search.name">
         <input type="text" class="form-control" placeholder="请输入用户类型" v-model="search.utype">
+        <!--<el-select v-model="" placeholder="请选择">-->
+          <!--<el-option-->
+            <!--v-for="item in options"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
       </div>
       <input type="button" class="btn btn-default" @click="SearchData" value="查询">
     </form>
-    <div class="pull-right">
-      <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="getAllData()"> 新增</button>
+    <div class="add">
+      <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="getAllData()" style="float: right"> 新增</button>
     </div>
    </div>
     </div>
     <!--表格-->
     <div class="row center-block">
-      <div class="col-md-12">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+
         <el-table
           :data="tableData"
           style="width: 100%">
+          <!--<el-col :span="24">-->
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
@@ -40,7 +50,7 @@
                   <span>{{ props.row.ucollege}}</span>
                 </el-form-item>
                 <el-form-item label="用户身份">
-                  <span>{{ props.row.roleId=='b'?'教师':'学生'}}</span>
+                  <span>{{ props.row.role_id=='b'?'教师':'学生'}}</span>
                 </el-form-item>
                 <el-form-item label="用户类型">
                   <span>{{ props.row.utype==0?'实习':(props.row.utype==1?'试用':(props.row.utype==2?'员工':'离职'))}}</span>
@@ -54,13 +64,14 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column
-            label="商品 ID"
-            prop="code">
-          </el-table-column>
+          <!--<el-table-column-->
+            <!--label="用户 ID"-->
+            <!--prop="businessId">-->
+          <!--</el-table-column>-->
           <el-table-column
             label="姓名"
-            prop="name">
+            prop="name"
+          >
           </el-table-column>
           <el-table-column
             label="性别"
@@ -71,9 +82,9 @@
           </el-table-column>
           <el-table-column
             label="用户身份"
-            prop="roleId">
+            prop="role_id">
             <template slot-scope="props">
-              <span>{{props.row.roleId=='b'?'教师':'学生'}}</span>
+              <span>{{props.row.role_id=='b'?'教师':'学生'}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -97,7 +108,7 @@
 
             </template >
           </el-table-column>
-
+          <!--</el-col>-->
         </el-table>
 
 
@@ -154,7 +165,7 @@
                       </el-form-item>
 
                       <el-form-item label="用户身份">
-                        <el-radio-group v-model="tableForm.roleId">
+                        <el-radio-group v-model="tableForm.role_id">
                           <el-radio label="b" value="b">教师</el-radio>
                           <el-radio label="c" value="c">学生</el-radio>
                         </el-radio-group>
@@ -185,7 +196,14 @@
                       </el-form-item>
 
                   <el-form-item label="工作时间">
-                      <el-date-picker type="date" placeholder="请选择工作时间" v-model="tableForm.uworkdate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker
+                      v-model="tableForm.uworkdate"
+                      type="date"
+                      placeholder="选择日期"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                      <!--<el-date-picker type="date" placeholder="请选择工作时间" v-model="tableForm.uworkdate" style="width: 100%;"></el-date-picker>-->
                   </el-form-item>
                     <el-form-item label="工作单位" prop="ucollege">
                       <el-input v-model="tableForm.ucollege"></el-input>
@@ -235,7 +253,7 @@
                   </el-form-item>
 
                   <el-form-item label="用户身份">
-                    <el-radio-group v-model="tableForm.roleId">
+                    <el-radio-group v-model="tableForm.role_id">
                       <el-radio label="b" value="b">教师</el-radio>
                       <el-radio label="c" value="c">学生</el-radio>
                     </el-radio-group>
@@ -266,7 +284,13 @@
                   </el-form-item>
 
                   <el-form-item label="工作时间">
-                    <el-date-picker type="date" placeholder="请选择工作时间" v-model="tableForm.uworkdate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker
+                      v-model="tableForm.uworkdate"
+                      type="date"
+                      placeholder="选择日期"
+                      format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
                   </el-form-item>
                   <el-form-item label="工作单位" prop="ucollege">
                     <el-input v-model="tableForm.ucollege"></el-input>
@@ -311,8 +335,9 @@
     .navbar-form{
       padding:10px 0px;
     }
-    .pull-right{
+    .add{
       margin-top: 22px;
+
     }
     .el-form--inline .el-form-item{
       margin-right: 0px !important;
@@ -324,10 +349,13 @@
 
 <script>
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
+  import ElCol from 'element-ui/packages/col/src/col'
 //  import HeaderComponent from './components/header.vue'
 //  import OtherComponent from './components/other.vue'
   export default{
-    components: {ElButton},
+    components: {
+      ElCol,
+      ElButton},
     name: 'users',
     data() {
       var validateName = (rule, value, callback) => {
@@ -374,11 +402,25 @@
         }, 1000);
       };
       return {
+//        options[{
+//          value:'0',
+//          lable:'实习'
+//        },{
+//          value:'1',
+//          lable:'试用'
+//        },{
+//          value:'2',
+//          lable:'员工'
+//        },{
+//          value:'3',
+//          lable:'离职'
+//        }],
+//        value:'',
         tableData: [],
         tableForm: {
           businessId:'',
           name: '',
-          roleId: 'b',
+          role_id: 'b',
           idNumber: '',
           sex: 0,
           email: '',
@@ -431,6 +473,7 @@
             name : this.search.name,
             utype : this.search.utype
         },res=>{
+          console.log(this.search.utype)
             this.tableData = res.rows
             this.pages = res.pages
           },err=>{
@@ -494,7 +537,7 @@
       add(){
         this.pilot.ajaxPostUtil('/bUser/add', {
             name: this.tableForm.name,
-            roleId: this.tableForm.roleId,
+          role_id: this.tableForm.role_id,
             sex: this.tableForm.sex,
             idNumber: this.tableForm.idNumber,
             phone: this.tableForm.phone,
@@ -503,8 +546,9 @@
             ucollege: this.tableForm.ucollege,
             uworkdate: this.tableForm.uworkdate
           },res => {
-            console.log(res)
+            console.log(this.tableForm.uworkdate)
            if (res.code == 200){
+             alert('0');
              this.$notify.success({
                title : '提示',
                message : res.message,
@@ -512,10 +556,11 @@
              });
              // 清空表单
              this.resetForm();
+//             alert('1');
              $('#tableModal').modal('hide');
              this.getData();
            }else{
-
+//             alert('2');
              this.$notify.warning({
                title:'警告',
                message:'保存失败',
@@ -532,11 +577,13 @@
         this.tableForm.name = item.name
         this.tableForm.businessId = item.businessId
         this.tableForm.phone = item.phone
+        this.tableForm.sex = item.sex
         this.tableForm.email = item.email
         this.tableForm.utype = item.utype
         this.tableForm.ucollege = item.ucollege
-        this.tableForm.roleId = item.roleId
+        this.tableForm.role_id = item.role_id
         this.tableForm.idNumber = item.idNumber
+        this.tableForm.uworkdate = item.uworkdate
       },
       modify(){
         this.pilot.ajaxPutUtil('/bUser/alter/' + this.tableForm.businessId, {
@@ -546,11 +593,13 @@
           email: this.tableForm.email,
           utype: this.tableForm.utype,
           ucollege: this.tableForm.ucollege,
-          roleId: this.tableForm.roleId,
-          idNumber: this.tableForm.idNumber
+          role_id: this.tableForm.role_id,
+          idNumber: this.tableForm.idNumber,
+          uworkdate: this.tableForm.uworkdate
 
           },res => {
-            console.log(res)
+            console.log(this.tableForm.role_id)
+          console.log(this.tableForm.uworkdate)
             if (res.code == 200){
               this.$notify.success({
                 title : '提示',
@@ -576,7 +625,7 @@
       // 表单重置
       resetForm() {
         this.tableForm.name = '',
-        this.tableForm.roleId = 'b',
+        this.tableForm.role_id = 'b',
         this.tableForm.sex = 0,
         this.tableForm.phone = '',
         this.tableForm.email = '',
