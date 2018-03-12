@@ -260,8 +260,8 @@
 
                   <el-form-item label="用户身份">
                     <el-radio-group v-model="tableForm.roleId">
-                      <el-radio label="a" value="a">教师</el-radio>
-                      <el-radio label="b" value="b">学生</el-radio>
+                      <el-radio label="b" value="b">教师</el-radio>
+                      <el-radio label="c" value="c">学生</el-radio>
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item label="身份证号" prop="idNumber">
@@ -497,6 +497,7 @@
       del(id){
         console.log(id) ;
         let that = this ;
+
         this.pilot.ajaxDeleteUtil('/bUser/del/' + id ,{
 
         },res=>{
