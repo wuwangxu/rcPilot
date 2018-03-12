@@ -5,9 +5,10 @@
    <div class="col-md-12">
     <form class="navbar-form navbar-left">
       <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search" v-model="search.name">
+        <input type="text" class="form-control" placeholder="请输入姓名" v-model="search.name">
+        <input type="text" class="form-control" placeholder="请输入用户类型" v-model="search.utype">
       </div>
-      <button class="btn btn-default" @click="getData">查询</button>
+      <input type="button" class="btn btn-default" @click="SearchData" value="查询">
     </form>
     <div class="pull-right">
       <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="getAllData()"> 新增</button>
@@ -44,10 +45,11 @@
                 <el-form-item label="用户类型">
                   <span>{{ props.row.utype==0?'实习':(props.row.utype==1?'试用':(props.row.utype==2?'员工':'离职'))}}</span>
                 </el-form-item>
-                <el-table-column
-                  label="参加工作时间"
-                  prop="uworkdate">
-                </el-table-column>
+                <el-form-item
+                  label="参加工作时间">
+                  <span>{{ props.row.uworkdate }}</span>
+
+                </el-form-item>
 
               </el-form>
             </template>
@@ -136,86 +138,150 @@
             <!-- Horizontal Form -->
             <div class="box box-info">
               <!-- form start -->
-              <form class="form-horizontal">
+              <!--<form class="form-horizontal">-->
+              <el-form :model="tableForm"  :rules="rules" ref="tableForm" label-width="100px" class="demo-ruleForm">
                 <div class="box-body">
-                  <div class="form-group">
-                    <label for="name" class="col-sm-3 control-label">姓名</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="name" placeholder="请输入姓名" v-model="tableForm.name">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">用户身份</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="teacher" v-model="tableForm.roleId" value="b">教师
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="student" v-model="tableForm.roleId" value="c">学生
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">性别</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="man" v-model="tableForm.sex" value="0">男
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="woman" v-model="tableForm.sex" value="1">女
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="idNumber" class="col-sm-3 control-label">身份证号</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="idNumber" placeholder="请输入身份证号" v-model="tableForm.idNumber">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">用户类型</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="Internship" v-model="tableForm.utype" value="0">实习
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="Probationary" v-model="tableForm.utype" value="1">试用
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="staff" v-model="tableForm.utype" value="3">员工
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="Separation" v-model="tableForm.utype" value="4">离职
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="uworkdate" class="col-sm-3 control-label">工作时间</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="uworkdate" placeholder="请输入工作时间" v-model="tableForm.uworkdate">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="ucollege" class="col-sm-3 control-label">工作单位</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="ucollege" placeholder="请输入工作单位" v-model="tableForm.ucollege">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="email" class="col-sm-3 control-label">邮箱</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="email" placeholder="请输入邮箱" v-model="tableForm.email">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                  <label for="phone" class="col-sm-3 control-label">联系电话</label>
-                  <div class="col-md-9">
-                    <input type="text" class="form-control" id="phone" placeholder="联系电话" v-model="tableForm.phone">
-                  </div>
+
+                    <el-form-item label="姓名" prop="name">
+                      <el-input v-model="tableForm.name"></el-input>
+                    </el-form-item>
+
+                      <el-form-item label="性别">
+                        <el-radio-group v-model="tableForm.sex">
+                          <el-radio :label="0" value="0">男</el-radio>
+                          <el-radio :label="1" value="1">女</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+
+                      <el-form-item label="用户身份">
+                        <el-radio-group v-model="tableForm.roleId">
+                          <el-radio label="b" value="b">教师</el-radio>
+                          <el-radio label="c" value="c">学生</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+                      <el-form-item label="身份证号" prop="idNumber">
+                        <el-input v-model="tableForm.idNumber"></el-input>
+                      </el-form-item>
+                  <el-form-item
+                    prop="email"
+                    label="邮箱"
+                    :rules="[
+      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+    ]">
+                    <el-input v-model="tableForm.email"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="联系电话" prop="phone">
+                    <el-input v-model.number="tableForm.phone"></el-input>
+                  </el-form-item>
+                      <el-form-item label="用户类型">
+                        <el-radio-group v-model="tableForm.utype">
+                          <el-radio :label="0" value="0">实习</el-radio>
+                          <el-radio :label="1" value="1">试用</el-radio>
+                          <el-radio :label="2" value="2">员工</el-radio>
+                          <el-radio :label="3" value="3">离职</el-radio>
+                        </el-radio-group>
+                      </el-form-item>
+
+                  <el-form-item label="工作时间">
+                      <el-date-picker type="date" placeholder="请选择工作时间" v-model="tableForm.uworkdate" style="width: 100%;"></el-date-picker>
+                  </el-form-item>
+                    <el-form-item label="工作单位" prop="ucollege">
+                      <el-input v-model="tableForm.ucollege"></el-input>
+                    </el-form-item>
+
+
+
+
+
+
+                  <!--<div class="form-group">-->
+                    <!--<label for="name" class="col-sm-3 control-label">姓名</label>-->
+                    <!--<div class="col-md-9">-->
+                      <!--<input type="text" class="form-control" id="name" placeholder="请输入姓名" v-model="tableForm.name">-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-3 control-label">用户身份</label>-->
+                    <!--<div class="col-sm-9 radio">-->
+                      <!--<label>-->
+                        <!--<input type="radio" name="teacher" v-model="tableForm.roleId" value="b">教师-->
+                      <!--</label>-->
+                      <!--<label style="margin-left:1rem">-->
+                        <!--<input type="radio" name="student" v-model="tableForm.roleId" value="c">学生-->
+                      <!--</label>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-3 control-label">性别</label>-->
+                    <!--<div class="col-sm-9 radio">-->
+                      <!--<label>-->
+                        <!--<input type="radio" name="man" v-model="tableForm.sex" value="0">男-->
+                      <!--</label>-->
+                      <!--<label style="margin-left:1rem">-->
+                        <!--<input type="radio" name="woman" v-model="tableForm.sex" value="1">女-->
+                      <!--</label>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label for="idNumber" class="col-sm-3 control-label">身份证号</label>-->
+                    <!--<div class="col-md-9">-->
+                      <!--<input type="text" class="form-control" id="idNumber" placeholder="请输入身份证号" v-model="tableForm.idNumber">-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-3 control-label">用户类型</label>-->
+                    <!--<div class="col-sm-9 radio">-->
+                      <!--<label>-->
+                        <!--<input type="radio" name="Internship" v-model="tableForm.utype" value="0">实习-->
+                      <!--</label>-->
+                      <!--<label style="margin-left:1rem">-->
+                        <!--<input type="radio" name="Probationary" v-model="tableForm.utype" value="1">试用-->
+                      <!--</label>-->
+                      <!--<label style="margin-left:1rem">-->
+                        <!--<input type="radio" name="staff" v-model="tableForm.utype" value="3">员工-->
+                      <!--</label>-->
+                      <!--<label style="margin-left:1rem">-->
+                        <!--<input type="radio" name="Separation" v-model="tableForm.utype" value="4">离职-->
+                      <!--</label>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label for="uworkdate" class="col-sm-3 control-label">工作时间</label>-->
+                    <!--<div class="col-md-9">-->
+                      <!--&lt;!&ndash;<input type="text" class="form-control" id="uworkdate" placeholder="请输入工作时间" v-model="tableForm.uworkdate">&ndash;&gt;-->
+                      <!--<el-date-picker-->
+                        <!--v-model="tableForm.uworkdate"-->
+                        <!--type="date"-->
+                        <!--placeholder="请选择工作时间"-->
+                        <!--id="uworkdate">-->
+                      <!--</el-date-picker>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label for="ucollege" class="col-sm-3 control-label">工作单位</label>-->
+                    <!--<div class="col-md-9">-->
+                      <!--<input type="text" class="form-control" id="ucollege" placeholder="请输入工作单位" v-model="tableForm.ucollege">-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label for="email" class="col-sm-3 control-label">邮箱</label>-->
+                    <!--<div class="col-md-9">-->
+                      <!--<input type="text" class="form-control" id="email" placeholder="请输入邮箱" v-model="tableForm.email">-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="phone" class="col-sm-3 control-label">联系电话</label>-->
+                  <!--<div class="col-md-9">-->
+                    <!--<input type="text" class="form-control" id="phone" placeholder="联系电话" v-model="tableForm.phone">-->
+                  <!--</div>-->
+                <!--</div>-->
                 </div>
-                </div>
-                <!-- /.box-body -->
-              </form>
+                 <!--/.box-body-->
+              </el-form>
+
+              <!--</form>-->
             </div>
           </div>
           <div class="modal-footer">
@@ -240,86 +306,147 @@
             <!-- Horizontal Form -->
             <div class="box box-info">
               <!-- form start -->
-              <form class="form-horizontal">
+              <el-form :model="tableForm"  :rules="rules" ref="tableForm" label-width="100px" class="demo-ruleForm">
                 <div class="box-body">
-                  <div class="form-group">
-                    <label for="name" class="col-sm-3 control-label">姓名</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="name" placeholder="请输入姓名" v-model="tableForm.name">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">用户身份</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="teacher" v-model="tableForm.roleId" value="b">教师
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="student" v-model="tableForm.roleId" value="c">学生
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">性别</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="man" v-model="tableForm.sex" value="0">男
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="woman" v-model="tableForm.sex" value="1">女
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="idNumber" class="col-sm-3 control-label">身份证号</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="idNumber" placeholder="请输入身份证号" v-model="tableForm.idNumber">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-3 control-label">用户类型</label>
-                    <div class="col-sm-9 radio">
-                      <label>
-                        <input type="radio" name="Internship" v-model="tableForm.utype" value="0">实习
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="Probationary" v-model="tableForm.utype" value="1">试用
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="staff" v-model="tableForm.utype" value="3">员工
-                      </label>
-                      <label style="margin-left:1rem">
-                        <input type="radio" name="Separation" v-model="tableForm.utype" value="4">离职
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="uworkdate" class="col-sm-3 control-label">工作时间</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="uworkdate" placeholder="请输入工作时间" v-model="tableForm.uworkdate">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="ucollege" class="col-sm-3 control-label">工作单位</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="ucollege" placeholder="请输入工作单位" v-model="tableForm.ucollege">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="email" class="col-sm-3 control-label">邮箱</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="email" placeholder="请输入邮箱" v-model="tableForm.email">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="phone" class="col-sm-3 control-label">联系电话</label>
-                    <div class="col-md-9">
-                      <input type="text" class="form-control" id="phone" placeholder="联系电话" v-model="tableForm.phone">
-                    </div>
-                  </div>
+
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="tableForm.name"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="性别">
+                    <el-radio-group v-model="tableForm.sex">
+                      <el-radio label="0" value="0">男</el-radio>
+                      <el-radio label="1" value="1">女</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item label="用户身份">
+                    <el-radio-group v-model="tableForm.roleId">
+                      <el-radio label="b" value="b">教师</el-radio>
+                      <el-radio label="c" value="c">学生</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="身份证号" prop="idNumber">
+                    <el-input v-model="tableForm.idNumber"></el-input>
+                  </el-form-item>
+                  <el-form-item
+                    prop="email"
+                    label="邮箱"
+                    :rules="[
+      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+    ]">
+                    <el-input v-model="tableForm.email"></el-input>
+                  </el-form-item>
+
+                  <el-form-item label="联系电话" prop="phone">
+                    <el-input v-model.number="tableForm.phone"></el-input>
+                  </el-form-item>
+                  <el-form-item label="用户类型">
+                    <el-radio-group v-model="tableForm.utype">
+                      <el-radio label="0" value="0">实习</el-radio>
+                      <el-radio label="1" value="1">试用</el-radio>
+                      <el-radio label="2" value="2">员工</el-radio>
+                      <el-radio label="3" value="3">离职</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+
+                  <el-form-item label="工作时间">
+                    <el-date-picker type="date" placeholder="请选择工作时间" v-model="tableForm.uworkdate" style="width: 100%;"></el-date-picker>
+                  </el-form-item>
+                  <el-form-item label="工作单位" prop="ucollege">
+                    <el-input v-model="tableForm.ucollege"></el-input>
+                  </el-form-item>
+
+
+
+
+
+
+                  <!--<div class="form-group">-->
+                  <!--<label for="name" class="col-sm-3 control-label">姓名</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--<input type="text" class="form-control" id="name" placeholder="请输入姓名" v-model="tableForm.name">-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label class="col-sm-3 control-label">用户身份</label>-->
+                  <!--<div class="col-sm-9 radio">-->
+                  <!--<label>-->
+                  <!--<input type="radio" name="teacher" v-model="tableForm.roleId" value="b">教师-->
+                  <!--</label>-->
+                  <!--<label style="margin-left:1rem">-->
+                  <!--<input type="radio" name="student" v-model="tableForm.roleId" value="c">学生-->
+                  <!--</label>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label class="col-sm-3 control-label">性别</label>-->
+                  <!--<div class="col-sm-9 radio">-->
+                  <!--<label>-->
+                  <!--<input type="radio" name="man" v-model="tableForm.sex" value="0">男-->
+                  <!--</label>-->
+                  <!--<label style="margin-left:1rem">-->
+                  <!--<input type="radio" name="woman" v-model="tableForm.sex" value="1">女-->
+                  <!--</label>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="idNumber" class="col-sm-3 control-label">身份证号</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--<input type="text" class="form-control" id="idNumber" placeholder="请输入身份证号" v-model="tableForm.idNumber">-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label class="col-sm-3 control-label">用户类型</label>-->
+                  <!--<div class="col-sm-9 radio">-->
+                  <!--<label>-->
+                  <!--<input type="radio" name="Internship" v-model="tableForm.utype" value="0">实习-->
+                  <!--</label>-->
+                  <!--<label style="margin-left:1rem">-->
+                  <!--<input type="radio" name="Probationary" v-model="tableForm.utype" value="1">试用-->
+                  <!--</label>-->
+                  <!--<label style="margin-left:1rem">-->
+                  <!--<input type="radio" name="staff" v-model="tableForm.utype" value="3">员工-->
+                  <!--</label>-->
+                  <!--<label style="margin-left:1rem">-->
+                  <!--<input type="radio" name="Separation" v-model="tableForm.utype" value="4">离职-->
+                  <!--</label>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="uworkdate" class="col-sm-3 control-label">工作时间</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--&lt;!&ndash;<input type="text" class="form-control" id="uworkdate" placeholder="请输入工作时间" v-model="tableForm.uworkdate">&ndash;&gt;-->
+                  <!--<el-date-picker-->
+                  <!--v-model="tableForm.uworkdate"-->
+                  <!--type="date"-->
+                  <!--placeholder="请选择工作时间"-->
+                  <!--id="uworkdate">-->
+                  <!--</el-date-picker>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="ucollege" class="col-sm-3 control-label">工作单位</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--<input type="text" class="form-control" id="ucollege" placeholder="请输入工作单位" v-model="tableForm.ucollege">-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="email" class="col-sm-3 control-label">邮箱</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--<input type="text" class="form-control" id="email" placeholder="请输入邮箱" v-model="tableForm.email">-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                  <!--<label for="phone" class="col-sm-3 control-label">联系电话</label>-->
+                  <!--<div class="col-md-9">-->
+                  <!--<input type="text" class="form-control" id="phone" placeholder="联系电话" v-model="tableForm.phone">-->
+                  <!--</div>-->
+                  <!--</div>-->
                 </div>
-                <!-- /.box-body -->
-              </form>
+                <!--/.box-body-->
+              </el-form>
             </div>
           </div>
           <div class="modal-footer">
@@ -349,7 +476,7 @@
       margin-bottom: 0;
       width: 50%;
     }
-  .form-horizontal{
+  .demo-ruleForm{
     padding-left: 1em;
     padding-right: 5em;
   }
@@ -359,6 +486,12 @@
     .pull-right{
       margin-top: 22px;
     }
+    .el-form--inline .el-form-item{
+      margin-right: 0px !important;
+    }
+  .demo-table-expand label{
+    width: 100px;
+  }
 </style>
 
 <script>
@@ -369,6 +502,49 @@
     components: {ElButton},
     name: 'users',
     data() {
+      var validateName = (rule, value, callback) => {
+
+        if (value === '') {
+          return callback(new Error('请输入姓名'));
+        }
+        var pattern = new RegExp(/^[a-zA-Z0-9-_\u4e00-\u9fa5]+$/g);
+        setTimeout(() => {
+          if (value.length > 5) {
+            callback(new Error('姓名不能超过5位'));
+          }
+          else if (pattern.test(value) == false) {
+            callback(new Error('请不要输入特殊字符'));
+          } else {
+            callback();
+          }
+        }, 1000);
+      };
+      var checknumber = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('身份证号不能为空'));
+        }
+        var pattern = new RegExp(/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/)
+        setTimeout(() => {
+          if (pattern.test(value) === false) {
+            return callback(new Error('身份证格式不正确'));
+          } else {
+              callback();
+          }
+        }, 1000);
+      };
+      var checkphone = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('联系电话不能为空'));
+        }
+        var pattern = new RegExp(/^1[3|4|5|7|8][0-9]{9}$/)
+        setTimeout(() => {
+          if (pattern.test(value) === false) {
+            return callback(new Error('联系方式不正确'));
+          } else {
+            callback();
+          }
+        }, 1000);
+      };
       return {
         tableData: [],
         tableForm: {
@@ -376,34 +552,61 @@
           name: '',
           roleId: 'b',
           idNumber: '',
-          sex: '0',
+          sex: 0,
           email: '',
           phone: '',
-          utype: '0',
+          utype: 0,
           uworkdate: ''
         },
         search:{
-          name:''
+          name:'',
+          utype:''
         },
         pages: '', // 分页
         pageNu: 1 , // 第一页
-        pageSize: 10 // 一页十行
+        pageSize: 10 ,// 一页十行
+
+
+        rules: {
+         name: [
+           {required:true, validator: validateName, trigger: 'blur'}
+          ],
+         idNumber: [
+           {required:true, validator: checknumber, trigger: 'blur'}
+         ],
+         phone: [
+           {required:true, validator: checkphone, trigger: 'blur'}
+         ]
+      }
       }
 
     },
     methods: {
       getData() {
-        let that = this;
         this.pilot.ajaxGetUtil('/bUser/queryBUserByPagination', {
           rows: this.pageSize,
-          page: this.pageNu,
-          name: this.search.name
+          page: this.pageNu
           },res => {
-            console.log(res)
-            that.tableData = res.rows
-            that.pages = res.pages
+          console.log(res)
+            this.tableData = res.rows
+            this.pages = res.pages
              },err => {
             console.log(err);
+          }
+        )
+      },
+      // 搜索
+      SearchData(){
+        this.pilot.ajaxGetUtil('/bUser/queryStaffByCriteria',{
+            rows: this.pageSize,
+            page: this.pageNu,
+            name : this.search.name,
+            utype : this.search.utype
+        },res=>{
+            this.tableData = res.rows
+            this.pages = res.pages
+          },err=>{
+            alert('err');
           }
         )
       },
@@ -462,15 +665,15 @@
 
       add(){
         this.pilot.ajaxPostUtil('/bUser/add', {
-           name: this.tableForm.name,
-          roleId: this.tableForm.roleId,
-             sex: this.tableForm.sex,
-          idNumber: this.tableForm.idNumber,
-          phone: this.tableForm.phone,
-          email: this.tableForm.email,
-          utype: this.tableForm.utype,
-          ucollege: this.tableForm.ucollege,
-          uworkdate: this.tableForm.uworkdate
+            name: this.tableForm.name,
+            roleId: this.tableForm.roleId,
+            sex: this.tableForm.sex,
+            idNumber: this.tableForm.idNumber,
+            phone: this.tableForm.phone,
+            email: this.tableForm.email,
+            utype: this.tableForm.utype,
+            ucollege: this.tableForm.ucollege,
+            uworkdate: this.tableForm.uworkdate
           },res => {
             console.log(res)
            if (res.code == 200){
@@ -546,10 +749,10 @@
       resetForm() {
         this.tableForm.name = '',
         this.tableForm.roleId = 'b',
-        this.tableForm.sex = '0',
+        this.tableForm.sex = 0,
         this.tableForm.phone = '',
         this.tableForm.email = '',
-        this.tableForm.utype = '0',
+        this.tableForm.utype = 0,
         this.tableForm.uworkdate = ''
       },
       // 切换
