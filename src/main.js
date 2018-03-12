@@ -15,13 +15,15 @@ import { domain, count, prettyDate, pluralize } from './filters'
 // Import Views - Top level
 import AppView from './components/App.vue'
 
+//Piloturl
+import pilot from '../build/Piloturl'
+Vue.prototype.pilot = pilot
+
 // ElementUI
 import ElementUI from 'element-ui' /*   js   */
 import 'element-ui/lib/theme-chalk/index.css'   /*   css   */
 Vue.use(ElementUI)  /*   使用框架  */
 
-import pilot from '../build/Piloturl'
-Vue.prototype.pilot = pilot
 // Axios
 import axios from 'axios'
 Vue.prototype.axios = axios  /*   this.axios  */

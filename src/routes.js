@@ -50,9 +50,9 @@ const routes = [
       },{
         path: 'servertables',
         component: ServerTablesView,
-        name: 'serverTables',
-        meta: {description: 'Os table in CoPilot', requiresAuth: true }
-      }, {
+        name: 'ServerTables',
+        meta: {description: 'Server table in CoPilot', requiresAuth: true }
+      },  {
         path: 'tasks',
         component: TasksView,
         name: 'Tasks',
