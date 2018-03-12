@@ -11,12 +11,12 @@
             </div>
           </div>
           <!-- /.box-header -->
-          <div class="box-body table-responsive" style="height: 100%;">
+          <div class="box-body table-responsive " style="height: 100%;">
             <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
 
               <el-table-column type="expand">
                 <template slot-scope="props">
-                  <el-form label-position="left" inline class="demo-table-expand">
+                  <el-form label-position="left" inline class="demo-table-expand text-center">
                     <el-form-item label="服务器">
                       <span>{{ formatCategory(props.row) }}</span>
                     </el-form-item>
@@ -45,7 +45,7 @@
                       <span>{{ props.row.extranetIp }}</span>
                     </el-form-item>
                     <el-form-item label="服务器状态">
-                      <span>{{ props.row.status }}</span>
+                      <span class="fa fa-circle"  v-bind:class="[{'text-green':props.row.status==1},{'text-danger':props.row.status==0}]">{{props.row.status==1 ? '开启':'关闭'}}</span>
                     </el-form-item>
                     <el-form-item label="到期时间">
                       <span>{{ formatDate(props.row.endTime) }}</span>
@@ -60,79 +60,48 @@
                       <span>{{ formatDate(props.row.updateDate) }}</span>
                     </el-form-item>
                     <el-form-item label="启用状态">
-                      <span>{{ props.row.flag }}</span>
+                      <span class="fa fa-circle"  v-bind:class="[{'text-green':props.row.flag==1},{'text-danger':props.row.flag==0}]">{{props.row.flag==1 ? '开启':'关闭'}}</span>
+                      <!--<i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>-->
                     </el-form-item>
+                    <el-form-item label="标签">
+                      <span>{{ props.row.tag }}</span>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                    <textarea placeholder="暂无备注" disabled>{{props.row.remarks}}</textarea>
+                  </el-form-item>
                   </el-form>
                 </template>
               </el-table-column>
               <el-table-column
                 label="服务器"
                 prop="category"
-                :formatter="formatCategory"
-              >
+                :formatter="formatCategory">
               </el-table-column>
               <el-table-column
                 label="所属系统"
                 prop="name">
               </el-table-column>
               <el-table-column
-              label="状态"
-              prop="status">
+              label="状态">
+                <template slot-scope="scope">
+                  <i class="fa fa-circle text-green" v-if="scope.row.status==1"/><i class="fa fa-circle text-danger" v-if="scope.row.status==0"/>
+                </template>
             </el-table-column>
+              <el-table-column
+                label="标签"
+                prop="tag">
+              </el-table-column>
               <el-table-column
                 label="备注"
                 prop="remarks">
               </el-table-column>
-              <!--<thead>-->
-              <!--<tr>-->
-                <!--<th>服务器</th>-->
-                <!--<th>所属系统</th>-->
-                <!--<th>品牌</th>-->
-                <!--<th>系统编号</th>-->
-                <!--<th>标签</th>-->
-                <!--<th>CPU</th>-->
-                <!--<th>内存</th>-->
-                <!--<th>硬盘</th>-->
-                <!--<th>带宽</th>-->
-                <!--<th>内网IP</th>-->
-                <!--<th>外网IP</th>-->
-                <!--<th>状态</th>-->
-                <!--<th>到期时间</th>-->
-                <!--<th>备注</th>-->
-                <!--<th>创建者</th>-->
-                <!--<th>更新者</th>-->
-                <!--<th>更新时间</th>-->
-                <!--<th>启用状态</th>-->
-                <!--&lt;!&ndash;<th>操作系统ID</th>&ndash;&gt;-->
-                <!--<th>操作</th>-->
-              <!--</tr>-->
-              <!--</thead>-->
-              <!--<tbody style="height:100%;">-->
-              <!--<tr v-for="(item,index) in tableData">-->
-                <!--<td v-if="item.category===0">讯达云</td><td v-else-if="item.category===1">华为云</td><td v-else-if="item.category===2">519服务器</td><td v-else>其他服务器</td>-->
-                <!--<td>{{item.name}}</td>-->
-                <!--<td>{{item.brand}}</td>-->
-                <!--<td>{{item.code}}</td>-->
-                <!--<td>{{item.tag}}</td>-->
-                <!--<td>{{item.cpu}}</td>-->
-                <!--<td>{{item.memory}}</td>-->
-                <!--<td>{{item.disk}}</td>-->
-                <!--<td>{{item.broadband}}</td>-->
-                <!--<td>{{item.intranetIp}}</td>-->
-                <!--<td>{{item.extranetIp}}</td>-->
-                <!--<td>{{item.status}}</td>-->
-                <!--<td>{{item.endTime}}</td>-->
-                <!--<td>{{item.remarks}}</td>-->
-                <!--<td>{{item.createBy}}</td>-->
-                <!--<td>{{item.updateBy}}</td>-->
-                <!--<td>{{item.updateDate}}</td>-->
-                <!--<td>{{item.flag}}</td>-->
-                <!--<td>-->
-                  <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(item)" data-toggle="modal" data-target="#tableModal2"></a>-->
-                  <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(item.businessId)"></a>-->
-                <!--</td>-->
-              <!--</tr>-->
-              <!--</tbody>-->
+              <el-table-column
+              label="操作">
+                <template slot-scope="scope">
+                  <a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal" data-target="#tableModal2"></a>
+                  <a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>
+                </template>
+            </el-table-column>
             </el-table>
 
             <nav aria-label="..." class="pull-right nav-pageing">
@@ -176,53 +145,76 @@
                 <!-- form start -->
                 <form class="form-horizontal">
                   <div class="box-body">
-                    <!--<div class="form-group">-->
-                      <!--<label for="code" class="col-sm-2 control-label">编号</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<input type="text" class="form-control" id="code" placeholder="请输入编号" v-model="tableForm.code">-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                      <!--<label for="name" class="col-sm-2 control-label">名称</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<input type="text" class="form-control" id="name" placeholder="请输入名称" v-model="tableForm.name">-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                      <!--<label class="col-sm-2 control-label">一级</label>-->
-                      <!--<div class="col-sm-10 radio">-->
-                        <!--<label>-->
-                          <!--<input type="radio" name="optionsRadios" v-model="tableForm.isTop" value="1">是-->
-                        <!--</label>-->
-                        <!--<label style="margin-left:1rem">-->
-                          <!--<input type="radio" name="optionsRadios" v-model="tableForm.isTop" value="0">否-->
-                        <!--</label>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group" v-show="tableForm.isTop === '0'">-->
-                      <!--<label class="col-sm-2 control-label">父级</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<select class="form-control" v-model="tableForm.parent">-->
-                          <!--<option v-for="(item,index) in levelParent" :value="item.businessId">{{item.name}}</option>-->
-                        <!--</select>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                      <!--<label for="sort" class="col-sm-2 control-label">排序</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<input type="text" class="form-control" id="sort" placeholder="请输入排序号" v-model="tableForm.seq">-->
-                      <!--</div>-->
-                    <!--</div>-->
                     <div class="form-group">
-                      <label for="code2" class="col-sm-2 control-label">操作系统编号</label>
+                      <label for="name1" class="col-sm-2 control-label">所属系统</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="code1" placeholder="请输入编号" v-model="tableForm.code">
+                        <input type="text" class="form-control" id="name1" placeholder="请输入编号" v-model="tableForm.name">
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="name2" class="col-sm-2 control-label">操作系统名称</label>
+                      <label for="brand1" class="col-sm-2 control-label">品牌</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name1" placeholder="请输入名称" v-model="tableForm.name">
+                        <input type="text" class="form-control" id="brand1" placeholder="请输入名称" v-model="tableForm.brand">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="category1" class="col-sm-2 control-label">服务器</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="category1" placeholder="请输入名称" v-model="tableForm.category" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="cpu1" class="col-sm-2 control-label">CPU</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cpu1" placeholder="请输入名称" v-model="tableForm.cpu" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="tag1" class="col-sm-2 control-label">标签</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tag1" placeholder="请输入名称" v-model="tableForm.tag" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="broadbrand1" class="col-sm-2 control-label">带宽</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="broadbrand1" placeholder="请输入名称" v-model="tableForm.broadband" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="disk1" class="col-sm-2 control-label">硬盘</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="disk1" placeholder="请输入名称" v-model="tableForm.disk" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="extranetIp1" class="col-sm-2 control-label">外网IP</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="extranetIp1" placeholder="请输入名称" v-model="tableForm.extranetIp" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="intranetIp1" class="col-sm-2 control-label">内网IP</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="intranetIp1" placeholder="请输入名称" v-model="tableForm.intranetIp" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="memory1" class="col-sm-2 control-label">内存</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="memory1" placeholder="请输入名称" v-model="tableForm.memory" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="endTime1" class="col-sm-2 control-label">到期时间</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="endTime1" placeholder="请输入名称" v-model="tableForm.endTime" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="status1" class="col-sm-2 control-label">状态</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="status1" placeholder="请输入名称" v-model="tableForm.status" >
                       </div>
                     </div>
                     <div class="form-group">
@@ -246,7 +238,7 @@
         <!-- /.modal-dialog -->
       </div>
 
-      <!-- modal -->
+      <!-- 修改弹出框modal -->
       <div class="modal fade" id="tableModal2">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -262,48 +254,77 @@
                 <form class="form-horizontal">
                   <div class="box-body">
                     <div class="form-group">
-                      <label for="code2" class="col-sm-2 control-label">操作系统编号</label>
+                      <label for="name2" class="col-sm-2 control-label">所属系统</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="code2" placeholder="请输入编号" v-model="tableForm.code">
+                        <input type="text" class="form-control" id="name2" placeholder="请输入编号" v-model="tableForm.name">
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="name2" class="col-sm-2 control-label">操作系统名称</label>
+                      <label for="brand2" class="col-sm-2 control-label">品牌</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name2" placeholder="请输入名称" v-model="tableForm.name">
+                        <input type="text" class="form-control" id="brand2" placeholder="请输入名称" v-model="tableForm.brand">
                       </div>
                     </div>
                     <div class="form-group">
-                    <label for="name2" class="col-sm-2 control-label">操作系统ID</label>
-                    <div class="col-sm-10">
-                      <input type="text" class="form-control" id="businessId2" placeholder="请输入名称" v-model="tableForm.businessId" readonly>
+                      <label for="category2" class="col-sm-2 control-label">服务器</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="category2" placeholder="请输入名称" v-model="tableForm.category" >
+                      </div>
                     </div>
-                  </div>
-                    <!--<div class="form-group">-->
-                      <!--<label class="col-sm-2 control-label">一级</label>-->
-                      <!--<div class="col-sm-10 radio">-->
-                        <!--<label>-->
-                          <!--<input type="radio" name="optionsRadios" v-model="tableForm.isTop" value="1">是-->
-                        <!--</label>-->
-                        <!--<label style="margin-left:1rem">-->
-                          <!--<input type="radio" name="optionsRadios" v-model="tableForm.isTop" value="0">否-->
-                        <!--</label>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group" v-show="tableForm.isTop === '0'">-->
-                      <!--<label class="col-sm-2 control-label">父级</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<select class="form-control" v-model="tableForm.parent">-->
-                          <!--<option v-for="(item,index) in levelParent" :value="item.businessId">{{item.name}}</option>-->
-                        <!--</select>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                      <!--<label for="sort2" class="col-sm-2 control-label">排序</label>-->
-                      <!--<div class="col-sm-10">-->
-                        <!--<input type="text" class="form-control" id="sort2" placeholder="请输入排序号" v-model="tableForm.seq">-->
-                      <!--</div>-->
-                    <!--</div>-->
+                    <div class="form-group">
+                      <label for="cpu2" class="col-sm-2 control-label">CPU</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="cpu2" placeholder="请输入名称" v-model="tableForm.cpu" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="tag2" class="col-sm-2 control-label">标签</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="tag2" placeholder="请输入名称" v-model="tableForm.tag" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="broadbrand2" class="col-sm-2 control-label">带宽</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="broadbrand2" placeholder="请输入名称" v-model="tableForm.broadband" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="disk2" class="col-sm-2 control-label">硬盘</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="disk2" placeholder="请输入名称" v-model="tableForm.disk" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="extranetIp2" class="col-sm-2 control-label">外网IP</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="extranetIp2" placeholder="请输入名称" v-model="tableForm.extranetIp" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="intranetIp2" class="col-sm-2 control-label">内网IP</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="intranetIp2" placeholder="请输入名称" v-model="tableForm.intranetIp" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="memory2" class="col-sm-2 control-label">内存</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="memory2" placeholder="请输入名称" v-model="tableForm.memory" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="endTime2" class="col-sm-2 control-label">到期时间</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="endTime2" placeholder="请输入名称" v-model="tableForm.endTime" >
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="status2" class="col-sm-2 control-label">状态</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="status2" placeholder="请输入名称" v-model="tableForm.status" >
+                      </div>
+                    </div>
                     <div class="form-group">
                       <label class="col-sm-2 control-label">备注</label>
                       <div class="col-sm-10">
@@ -338,7 +359,6 @@
   import 'datatables.net-bs'
   import axios from 'axios'
 
-
   export default {
     name: "ServerTables",
     data () {
@@ -349,7 +369,20 @@
         tableData:[],//数据
         tableForm:{    //弹出框表单
           businessId:'',
+          // newEndTime:this.endTime,
           name:'',
+          brand:'',
+          category:'',
+          cpu:'',
+          tag:'',
+          broadband:'',
+          disk:'',
+          extranetIp:'',
+          intranetIp:'',
+          memory:'',
+          endTime:'',
+          endTimestr:'',
+          status:'',
           code:'',
           createBy:'',
           createDate:'',
@@ -366,17 +399,7 @@
       }
     },
     mounted() {
-      // this.$nextTick(() => {
-      //   $('#example1').DataTable({
-      //     data:this.serverdatas,
-      //
-      //     serverSide:true,
-      //     ajax:{
-      //       type:'GET',
-      //       url:this.globalUrl+'/bos/queryBOsByPagination'
-      //     }
-      //   })
-      // })
+
       this.getData()
     },
     methods:{
@@ -415,19 +438,19 @@
           spinner: 'el-icon-loading',
           background: 'rgba(255,255,255, 0.5)',
         });
-        this.pilot.ajaxPostUtil('bos/add',{
-          // businessId:this.tableForm.businessId,
-          code:this.tableForm.code,
+        this.pilot.ajaxPostUtil('bserver/add',{
           name:this.tableForm.name,
-          // createBy:this.tableForm.createBy,
-          // createDate:this.tableForm.createDate,
-          // updateBy:this.tableForm.updateBy,
-          // updateDate:this.tableForm.createDate,
-          // flag:this.tableForm.flag,
-          remarks:this.tableForm.remarks,
-          // isTop:this.tableForm.isTop,
-          // parentId:this.tableForm.parent,
-          // seq:this.tableForm.seq,
+          brand:this.tableForm.brand,
+          category:this.tableForm.category,
+          cpu:this.tableForm.cpu,
+          tag:this.tableForm.tag,
+          broadband:this.tableForm.broadband,
+          disk:this.tableForm.disk,
+          extranetIp:this.tableForm.extranetIp,
+          intranetIp:this.tableForm.intranetIp,
+          memory:this.tableForm.memory,
+          // endTime:this.tableForm.endTime,
+          status:this.tableForm.status
         },res=>{
           if (res.code===200){
             loading.close();
@@ -442,6 +465,7 @@
             this.getData();
           }else{
             loading.close();
+            console.log(this.tableForm)
             this.$notify.warning({
               title:'警告',
               message:'保存失败',
@@ -465,7 +489,7 @@
           spinner: 'el-icon-loading',
           background: 'rgba(255,255,255, 0.5)',
         });
-        this.pilot.ajaxDeleteUtil('bos/delete'+'/'+id,{
+        this.pilot.ajaxDeleteUtil('bserver'+'/'+id,{
           // params
         },res=>{
           if (res.code===200){
@@ -493,20 +517,35 @@
       },
       //修改
       edit(item){
-        this.tableForm.code = item.code;
+        // console.log(item)
         this.tableForm.name = item.name;
+        this.tableForm.brand=item.brand;
+        this.tableForm.category=item.category;
+        this.tableForm.cpu=item.cpu;
+        this.tableForm.tag=item.tag;
+        this.tableForm.broadband=item.broadband;
+        this.tableForm.disk=item.disk;
+        this.tableForm.extranetIp=item.extranetIp;
+        this.tableForm.intranetIp=item.intranetIp;
+        this.tableForm.code = item.code;
+        this.tableForm.memory=item.memory;
+        this.tableForm.endTime=item.endTime;
+        this.tableForm.status=item.status;
         this.tableForm.businessId = item.businessId;
-        // this.tableForm.isTop = item.isTop;
-        // this.tableForm.seq = item.seq;
-        // this.tableForm.parent = item.parentId;
-        this.tableForm.remarks = item.remarks;
-        this.tableForm.createBy = item.createBy;
-        this.tableForm.createDate = item.createDate;
-        this.tableForm.updateBy = item.updateBy;
-        this.tableForm.updateDate = item.updateDate;
-        this.tableForm.flag = item.flag;
+        // console.log(this.tableForm)
 
-        console.log(item);
+        // this.tableForm.code = item.code;
+        // // this.tableForm.isTop = item.isTop;
+        // // this.tableForm.seq = item.seq;
+        // // this.tableForm.parent = item.parentId;
+        // this.tableForm.remarks = item.remarks;
+        // this.tableForm.createBy = item.createBy;
+        // this.tableForm.createDate = item.createDate;
+        // this.tableForm.updateBy = item.updateBy;
+        // this.tableForm.updateDate = item.updateDate;
+        // this.tableForm.flag = item.flag;
+
+        // console.log(item);
       },
       modify(){
         const loading = this.$loading({
@@ -515,14 +554,22 @@
           spinner: 'el-icon-loading',
           background: 'rgba(255,255,255, 0.5)',
         });
-        this.pilot.ajaxPutUtil('bos/update/'+this.tableForm.businessId,{
-          businessId:this.tableForm.businessId,
-          code:this.tableForm.code,
-          name:this.tableForm.name,
-          businessId:this.tableForm.businessId,
+        this.pilot.ajaxPutUtil('bserver/update/'+this.tableForm.businessId,{
           // parentId:this.tableForm.parent,
-          remarks:this.tableForm.remarks,
-          // seq:this.tableForm.seq
+          newEndTime:"1516931248000",
+          name:this.tableForm.name,
+          brand:this.tableForm.brand,
+          category:this.tableForm.category,
+          cpu:this.tableForm.cpu,
+          tag:this.tableForm.tag,
+          broadband:this.tableForm.broadband,
+          disk:this.tableForm.disk,
+          extranetIp:this.tableForm.extranetIp,
+          intranetIp:this.tableForm.intranetIp,
+          memory:this.tableForm.memory,
+          // endTime:this.tableForm.endTime,
+          status:this.tableForm.status
+
         },res=>{
           loading.close();
           if (res.code===200){
@@ -555,13 +602,22 @@
         this.tableForm.businessId = '';
         this.tableForm.code = '';
         this.tableForm.name = '';
-        this.tableForm.isTop = '1';
         this.tableForm.createBy = '';
         this.tableForm.createDate = '';
         this.tableForm.updateBy = '';
         this.tableForm.updateDate = '';
         this.tableForm.flag = '';
-
+        this.tableForm.brand = '';
+        this.tableForm.category = '';
+        this.tableForm.cpu = '';
+        this.tableForm.tag = '';
+        this.tableForm.broadband = '';
+        this.tableForm.disk = '';
+        this.tableForm.extranetIp = '';
+        this.tableForm.intranetIp = '';
+        this.tableForm.memory = '';
+        this.tableForm.endTime = '';
+        this.tableForm.status = '';
       },
       //切换
       toggleTabs(index){
@@ -585,6 +641,11 @@
 
       //category数据转换
       formatCategory: function (row, column) {
+        return row.category == 0 ? '讯达云' : row.category == 1 ? '华为云' : row.category == 2 ? '519服务器':'其他服务器';
+        // return this.categoryData[row.category];
+      },
+      //status转换
+      formatStatus: function (row, column) {
         return row.category == 0 ? '讯达云' : row.category == 1 ? '华为云' : row.category == 2 ? '519服务器':'其他服务器';
         // return this.categoryData[row.category];
       },
