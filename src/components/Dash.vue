@@ -47,7 +47,7 @@
               </ul>
             </li>
             <!-- /.messages-menu -->
-  
+
             <!-- Notifications Menu -->
             <li class="dropdown notifications-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
@@ -73,7 +73,7 @@
                 </li>
               </ul>
             </li>
-  
+
             <!-- Tasks Menu -->
             <li class="dropdown tasks-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
@@ -110,15 +110,29 @@
                 </li>
               </ul>
             </li>
-  
+
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
+                <!--v-show="isLogin"-->
+                <!--@mouseenter="userInfo.isShow=true"-->
+                <!--@mouseleave="userInfo.isShow=false"-->
+            <!--&gt;-->
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
                 <img v-bind:src="demo.avatar" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs">{{ demo.displayName }}</span>
               </a>
+              <ul class="dropdown-menu" id="ul-my">
+                <li>
+                  <!--<div class="pull-left">-->
+                    <!--<a href="#" class="">Profile</a>-->
+                  <!--</div>-->
+                <div class="pull-right">
+                  <a class="logout" @click="logOut">退 出</a>
+                </div>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -126,7 +140,7 @@
     </header>
     <!-- Left side column. contains the logo and sidebar -->
     <sidebar :display-name="demo.displayName" :picture-url="demo.avatar" />
-  
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
@@ -143,11 +157,11 @@
           <li class="active">{{$route.name.toUpperCase()}}</li>
         </ol>
       </section>
-  
+
       <router-view></router-view>
     </div>
     <!-- /.content-wrapper -->
-  
+
     <!-- Main Footer -->
     <footer class="main-footer">
       <strong>Copyright &copy; {{year}}
@@ -171,7 +185,12 @@ export default {
   },
   data: function () {
     return {
+//      userInfo:{
+//        isShow:false,// 个人信息
+//      },
+//      isLogin:false,
       // section: 'Dash',
+
       year: new Date().getFullYear(),
       classes: {
         fixed_layout: config.fixedLayout,
@@ -194,10 +213,20 @@ export default {
     }
   },
   methods: {
+
+    logOut(){
+      localStorage.clear();
+      sessionStorage.clear();
+      this.$router.push({
+        'path':'/Login'
+      });
+    },
     changeloading () {
       this.$store.commit('TOGGLE_SEARCHING')
     }
-  }
+  },
+
+
 }
 </script>
 
@@ -252,4 +281,24 @@ hr.visible-xs-block {
   height: 1px;
   border-color: transparent;
 }
+/*.dropdown-menu{*/
+  /*width: 157px !important;*/
+/*}*/
+.dropdown-menu{
+  background-color: #367fa9 !important;
+  max-width: 156px !important;
+  height: 35px;
+  color: white;
+  left:0 !important;
+}
+  .logout{
+    color: #dbddde;
+    font-size: 12px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 22.38%;
+    height: 1em;
+    margin-top: -0.5em;
+  }
 </style>
