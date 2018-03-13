@@ -497,31 +497,46 @@
       del(id){
         console.log(id) ;
         let that = this ;
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.pilot.ajaxDeleteUtil('/bUser/del/' + id ,{
 
-        this.pilot.ajaxDeleteUtil('/bUser/del/' + id ,{
+            },res=>{
+              console.log(res)
+              if (res.code == 200) {
+                that.$notify({
+                  title: ' 提示信息 ',
+                  message: res.message,
+                });
+                this.getData();
+              }else{
+                that.$notify.warning({
+                  title: '警告',
+                  message:'删除失败'+err,
+                  duration:2000
+                });
+              }
+            },
+            err=>{
+              this.$notify.error({
+                title:'错误',
+                message:'网络错误'+err,
+              });
+            })
+//          this.$message({
+//            type: 'success',
+//            message: '删除成功!'
+//          });
+        }).catch(() => {
+//          this.$message({
+//            type: 'info',
+//            message: '已取消删除'
+//          });
+        });
 
-        },res=>{
-          console.log(res)
-          if (res.code == 200) {
-            that.$notify({
-              title: ' 提示信息 ',
-              message: res.message,
-            });
-            this.getData();
-          }else{
-            that.$notify.warning({
-              title: '警告',
-              message:'删除失败'+err,
-              duration:2000
-            });
-          }
-        },
-        err=>{
-          this.$notify.error({
-            title:'错误',
-            message:'网络错误'+err,
-          });
-        })
       },
       // 新增
       getAllData(){
