@@ -1,3 +1,7 @@
+<!--
+在超小屏幕  手机 (<768px) 隐藏  创建者 创建时间 更新者
+-->
+
 <template>
   <section class="content">
     <div class="row center-block">
@@ -18,9 +22,9 @@
                 <th>操作系统编号</th>
                 <th>操作系统名称</th>
                 <!--<th>操作系统ID</th>-->
-                <th>创建者</th>
-                <th>创建时间</th>
-                <th>更新者</th>
+                <th class="hidden-xs">创建者</th>
+                <th class="hidden-xs">创建时间</th>
+                <th class="hidden-xs">更新者</th>
                 <th>更新时间</th>
                 <th>启用状态</th>
                 <th>备注</th>
@@ -33,9 +37,9 @@
                 <td>{{item.code}}</td>
                 <td>{{item.name}}</td>
                 <!--<td>{{item.businessId}}</td>-->
-                <td>{{item.createBy}}</td>
-                <td>{{formatDate(item.createDate)}}</td>
-                <td>{{item.updateBy}}</td>
+                <td class="hidden-xs">{{item.createBy}}</td>
+                <td class="hidden-xs">{{formatDate(item.createDate)}}</td>
+                <td class="hidden-xs">{{item.updateBy}}</td>
                 <td>{{formatDate(item.updateDate)}}</td>
                 <td><!--{{item.flag==1 ? ''}}-->
                   <i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>
