@@ -1,3 +1,7 @@
+<!--
+在超小屏幕  手机 (<768px) 隐藏  标签
+-->
+
 <template>
   <section class="content">
     <div class="row center-block">
@@ -6,8 +10,48 @@
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">操作系统列表</h3>
-            <div class="pull-right">
-              <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click=""> 新增</button>
+            <div class="row">
+              <div class="col-md-11">
+            <el-form :inline="true" :model="search" class="demo-form-inline">
+            <!--<form class="navbar-form navbar-left form-inline">-->
+              <!--<div class="form-group">-->
+                <!--<input type="text" class="form-control" placeholder="请输入系统名" v-model="search.name">-->
+                <!--<input type="text" class="form-control" placeholder="请输入标签" v-model="search.tag">-->
+              <el-form-item>
+                <el-input
+                  placeholder="请输入系统名"
+                  v-model="search.name"
+                  clearable>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item>
+                <el-input
+                  placeholder="请输入标签"
+                  v-model="search.tag"
+                  clearable>
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-select v-model="search.category" placeholder="选择服务器">
+                  <el-option
+                    v-for="item in categoryoptions"
+                    :key="item.category"
+                    :label="item.label"
+                    :value="item.category">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="SearchData">查询</el-button>
+                <el-button type="primary" @click="resetSearch">重置</el-button>
+              </el-form-item>
+            <!--</form>-->
+            </el-form>
+              </div>
+            <div class="pull-right col-md-1">
+              <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="" style="margin-top: 19px"> 新增</button>
+            </div>
             </div>
           </div>
           <!-- /.box-header -->
@@ -88,8 +132,12 @@
                 </template>
             </el-table-column>
               <el-table-column
+                :class-name="'hidden-xs'"
                 label="标签"
                 prop="tag">
+                <template slot-scope="scope">
+                  <el-tag>{{scope.row.tag}}</el-tag>
+                </template>
               </el-table-column>
               <el-table-column
                 label="备注"
@@ -130,7 +178,7 @@
           </div>
         </div>
       </div>
-      <!-- modal -->
+      <!-- 新增弹出框modal -->
       <div class="modal fade" id="tableModal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -159,8 +207,16 @@
                     </div>
                     <div class="form-group">
                       <label for="category1" class="col-sm-2 control-label">服务器</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="category1" placeholder="请输入名称" v-model="tableForm.category" >
+                      <div class="col-sm-10" id="category1">
+                        <!--<input type="text" class="form-control" id="category2" placeholder="请输入名称" v-model="tableForm.category" >-->
+                        <el-select v-model="tableForm.category" placeholder="请选择">
+                          <el-option
+                            v-for="item in categoryoptions"
+                            :key="item.category"
+                            :label="item.label"
+                            :value="item.category">
+                          </el-option>
+                        </el-select>
                       </div>
                     </div>
                     <div class="form-group">
@@ -207,14 +263,25 @@
                     </div>
                     <div class="form-group">
                       <label for="endTime1" class="col-sm-2 control-label">到期时间</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="endTime1" placeholder="请输入名称" v-model="tableForm.endTime" >
+                      <div class="col-sm-10" id="endTime1">
+                        <!--<input type="text" class="form-control" id="endTime2" placeholder="请输入名称" v-model="tableForm.endTime" >-->
+                        <el-date-picker
+                          v-model="tableForm.endTime"
+                          type="datetime"
+                          placeholder="选择日期时间"
+                          format="yyyy-MM-dd HH:mm:ss"
+                          value-format="yyyy-MM-dd HH:mm:ss">
+                        </el-date-picker>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="status1" class="col-sm-2 control-label">状态</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="status1" placeholder="请输入名称" v-model="tableForm.status" >
+                      <div class="col-sm-10" id="status1">
+                        <!--<input type="text" class="form-control" id="status2" placeholder="请输入名称" v-model="tableForm.status" >-->
+                        <el-radio-group v-model="tableForm.status" size="medium">
+                          <el-radio-button label="1">开启</el-radio-button>
+                          <el-radio-button label="0">关闭</el-radio-button>
+                        </el-radio-group>
                       </div>
                     </div>
                     <div class="form-group">
@@ -267,8 +334,16 @@
                     </div>
                     <div class="form-group">
                       <label for="category2" class="col-sm-2 control-label">服务器</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="category2" placeholder="请输入名称" v-model="tableForm.category" >
+                      <div class="col-sm-10" id="category2">
+                        <!--<input type="text" class="form-control" id="category2" placeholder="请输入名称" v-model="tableForm.category" >-->
+                        <el-select v-model="tableForm.category" placeholder="请选择">
+                          <el-option
+                            v-for="item in categoryoptions"
+                            :key="item.category"
+                            :label="item.label"
+                            :value="item.category">
+                          </el-option>
+                        </el-select>
                       </div>
                     </div>
                     <div class="form-group">
@@ -315,20 +390,30 @@
                     </div>
                     <div class="form-group">
                       <label for="endTime2" class="col-sm-2 control-label">到期时间</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="endTime2" placeholder="请输入名称" v-model="tableForm.endTime" >
+                      <div class="col-sm-10" id="endTime2">
+                        <!--<input type="text" class="form-control" id="endTime2" placeholder="请输入名称" v-model="tableForm.endTime" >-->
+                        <el-date-picker
+                          v-model="tableForm.endTime"
+                          type="datetime"
+                          placeholder="选择日期时间"
+                          value-format="yyyy-MM-dd HH:mm:ss">
+                        </el-date-picker>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="status2" class="col-sm-2 control-label">状态</label>
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control" id="status2" placeholder="请输入名称" v-model="tableForm.status" >
+                      <div class="col-sm-10" id="status2">
+                        <!--<input type="text" class="form-control" id="status2" placeholder="请输入名称" v-model="tableForm.status" >-->
+                        <el-radio-group v-model="tableForm.status" size="medium">
+                          <el-radio-button label="1">开启</el-radio-button>
+                          <el-radio-button label="0">关闭</el-radio-button>
+                        </el-radio-group>
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-sm-2 control-label">备注</label>
                       <div class="col-sm-10">
-                        <textarea class="form-control" rows="3" placeholder="请输入备注" v-model="tableForm.remarks"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="请输入备注" v-model="tableForm.remarks "></textarea>
                       </div>
                     </div>
                   </div>
@@ -367,6 +452,21 @@
         // response: null,
         // error: null,
         tableData:[],//数据
+        categoryoptions:[
+          {
+            category: '0',
+            label: '讯达云'
+          }, {
+            category: '1',
+            label: '华为云'
+          }, {
+            category: '2',
+            label: '519服务器'
+          }, {
+            category: '3',
+            label: '其他服务器'
+          }
+        ],//服务器
         tableForm:{    //弹出框表单
           businessId:'',
           // newEndTime:this.endTime,
@@ -395,7 +495,12 @@
         pages:'', //分页
         pageNu:1,
         pageSize:10,
-        message:''
+        message:'',
+        search:{
+          name:'',
+          tag:'',
+          category:''
+        }
       }
     },
     mounted() {
@@ -416,7 +521,7 @@
           page:this.pageNu,
           // sort:'seq'
           } , res=>{
-          console.log(res.rows)
+          // console.log(res.rows)
 
           this.tableData=res.rows
           this.pages=Math.ceil(res.total/this.pageSize)
@@ -449,7 +554,8 @@
           extranetIp:this.tableForm.extranetIp,
           intranetIp:this.tableForm.intranetIp,
           memory:this.tableForm.memory,
-          // endTime:this.tableForm.endTime,
+          // endTime:this.tableForm.endTime,//"endTime":"2018-03-02 16:10:37"
+          endTime:this.formatDate3(this.tableForm.endTime),//"endTime": 1516166358000
           status:this.tableForm.status
         },res=>{
           if (res.code===200){
@@ -465,7 +571,7 @@
             this.getData();
           }else{
             loading.close();
-            console.log(this.tableForm)
+            console.log(res.message)
             this.$notify.warning({
               title:'警告',
               message:'保存失败',
@@ -520,7 +626,7 @@
         // console.log(item)
         this.tableForm.name = item.name;
         this.tableForm.brand=item.brand;
-        this.tableForm.category=item.category;
+        // this.tableForm.category=item.category;
         this.tableForm.cpu=item.cpu;
         this.tableForm.tag=item.tag;
         this.tableForm.broadband=item.broadband;
@@ -529,7 +635,7 @@
         this.tableForm.intranetIp=item.intranetIp;
         this.tableForm.code = item.code;
         this.tableForm.memory=item.memory;
-        this.tableForm.endTime=item.endTime;
+        this.tableForm.endTime=this.formatDate2(item.endTime);
         this.tableForm.status=item.status;
         this.tableForm.businessId = item.businessId;
         // console.log(this.tableForm)
@@ -556,7 +662,7 @@
         });
         this.pilot.ajaxPutUtil('bserver/update/'+this.tableForm.businessId,{
           // parentId:this.tableForm.parent,
-          newEndTime:"1516931248000",
+          endDate:this.tableForm.endTime,
           name:this.tableForm.name,
           brand:this.tableForm.brand,
           category:this.tableForm.category,
@@ -567,7 +673,6 @@
           extranetIp:this.tableForm.extranetIp,
           intranetIp:this.tableForm.intranetIp,
           memory:this.tableForm.memory,
-          // endTime:this.tableForm.endTime,
           status:this.tableForm.status
 
         },res=>{
@@ -661,8 +766,49 @@
       //updateDate转换
       formatCreateDate:function (row,column) {
         return this.formatDate(row.updateDate)
-      }
+      },
 
+      formatDate2:function(datetime){
+        var now=new Date(Number(datetime));
+        var year=now.getYear()-100;
+        var month=now.getMonth()+1;
+        var date=now.getDate();
+        var hour=now.getHours();
+        var minute=now.getMinutes();
+        var second=now.getSeconds();
+
+        return "20"+year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+      },
+      formatDate3:function (datetimestr) {
+        var str = datetimestr.toString();
+        str = str.replace("/-/g", "/");
+//// str =  str.replace("T"," ");
+        var oDate = new Date(str);
+        return oDate;
+      },
+      // 搜索
+      SearchData(){
+        this.pilot.ajaxGetUtil('bserver/queryByCriteria',{
+            rows: this.pageSize,
+            page: this.pageNu,
+            name : this.search.name,
+            tag : this.search.tag,
+            category:this.search.category
+          },res=>{
+            this.tableData = res.rows
+            this.pages = res.pages
+          },err=>{
+            alert('err');
+          }
+        )
+      },
+      //重置search表单
+      resetSearch :function(){
+        this.search.name='';
+        this.search.tag='';
+        this.search.category='';
+        this.getData();
+      }
 
     },
     computed:{
