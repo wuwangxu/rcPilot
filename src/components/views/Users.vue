@@ -1,7 +1,9 @@
 <template>
   <section class="content">
     <!--header-->
-    <div class="row center-block header">
+
+
+    <div class=" center-block header">
    <div class="col-md-12">
      <div class="col-md-8 col-sm-8">
      <div class="row">
@@ -29,19 +31,21 @@
      <div class="col-md-4 col-sm-4">
     <div class="add">
       <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="getAllData()" style="float: right"> 新增</button>
+      <button class="btn btn-primary btn-sm fa fa-plus"  @click="resign(tableForm.businessId)" style="float: right;margin-right: 10px"> 离职</button>
     </div>
      </div>
    </div>
     </div>
+
     <!--表格-->
-    <div class="row center-block">
+    <div class="box-body">
+    <div class="row ">
       <div class="col-lg-12 col-md-12 col-sm-12">
         <el-table
-          :data="tableData">
-          <!--@row-click="handleCurrentChange"-->
-          <!--@selection-change="selsChange"-->
+          :data="tableData"
+          @selection-change="resignlist"
+        >
 
-          <!--<el-col :span="24">-->
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
@@ -71,14 +75,19 @@
                   <span>{{ props.row.uworkdate }}</span>
 
                 </el-form-item>
+                <el-form-item
+                  label="离职时间">
+                  <span>{{ props.row.uunworkdate }}</span>
+
+                </el-form-item>
 
               </el-form>
             </template>
           </el-table-column>
-          <!--<el-table-column-->
-            <!--type="selection"-->
-            <!--&gt;-->
-          <!--</el-table-column>-->
+          <el-table-column
+            type="selection"
+            >
+          </el-table-column>
           <el-table-column
             type="index"
             :index="indexMethod">
@@ -109,10 +118,10 @@
               <span>{{props.row.utype==0?'实习':(props.row.utype==1?'试用':(props.row.utype==2?'员工':'离职'))}}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="参加工作时间"
-            prop="uworkdate">
-          </el-table-column>
+          <!--<el-table-column-->
+            <!--label="参加工作时间"-->
+            <!--prop="uworkdate">-->
+          <!--</el-table-column>-->
 
           <el-table-column
             label="操作"
@@ -152,6 +161,7 @@
           </ul>
         </nav>
       </div>
+    </div>
     </div>
     <!--新增-->
     <div class="modal fade" id="tableModal">
@@ -199,10 +209,7 @@
                   <el-form-item
                     prop="email"
                     label="邮箱"
-                    :rules="[
-                      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-                    ]">
+                   >
                     <el-input v-model="tableForm.email"></el-input>
                   </el-form-item>
 
@@ -241,7 +248,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm()">取 消</button>
-            <button type="button" class="btn btn-primary" @click="add()">保 存</button>
+            <input type="button" class="btn btn-primary" @click="add" value="保 存">
           </div>
         </div>
         <!-- /.modal-content -->
@@ -261,7 +268,7 @@
             <!-- Horizontal Form -->
             <div class="box box-info">
               <!-- form start -->
-              <el-form :model="tableForm" :rules="rules" ref="tableForm" label-width="100px" class="demo-ruleForm">
+              <el-form :model="tableForm" :rules="rules" ref="tableForm2" label-width="100px" class="demo-ruleForm">
                 <div class="box-body">
 
                   <el-form-item label="姓名" prop="name">
@@ -286,11 +293,8 @@
                   </el-form-item>
                   <el-form-item
                     prop="email"
-                    label="邮箱"
-                    :rules="[
-                      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                      { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-                    ]">
+                    label="邮箱">
+
                     <el-input v-model="tableForm.email"></el-input>
                   </el-form-item>
 
@@ -429,6 +433,19 @@
           }
         }, 1000);
       };
+      var checkemail=(rule,value,callback)=> {
+        if (!value) {
+          return callback(new Error('邮箱不能为空'));
+        }
+        var pattern = new RegExp(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)
+        setTimeout(() => {
+          if (pattern.test(value) === false) {
+            return callback(new Error('邮箱格式不正确'));
+          } else {
+            callback();
+          }
+        }, 1000);
+      };
       return {
         options: [
           {
@@ -455,6 +472,7 @@
           phone: '',
           utype: 0,
           uworkdate: '',
+          unworkdate:'',
           loginName: '',
           password: ''
         },
@@ -477,202 +495,205 @@
           ],
           phone: [
             {required: true, validator: checkphone, trigger: 'blur'}
-          ]
+          ],
+          email:[
+              { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+              { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+            ],
+          sex:[{required: true}]
         }
       }
 
     },
     methods: {
-
       indexMethod(index){
-      return index + 1;
-    },
-    getData() {
-      this.pilot.ajaxGetUtil('/bUser/queryBUserByPagination', {
-          rows: this.pageSize,
-          page: this.pageNu
-        }, res => {
-          console.log(res)
-          this.tableData = res.rows
-          this.pages = res.pages
-        }, err => {
-          console.log(err);
-        }
-      )
-    },
-    // 搜索
-    SearchData(){
-      this.pilot.ajaxGetUtil('/bUser/queryStaffByCriteria', {
-          rows: this.pageSize,
-          page: this.pageNu,
-          name: this.search.name,
-          utype: this.search.utype
-        }, res => {
-          console.log(this.search.utype)
-          this.tableData = res.rows
-          this.pages = res.pages
-        }, err => {
-          alert('err');
-        }
-      )
-    },
-    // 删除
-    del(id){
-      console.log(id);
-      let that = this;
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.pilot.ajaxDeleteUtil('/bUser/del/' + id, {}, res => {
+          return index + 1;
+      },
+      getData() {
+        this.pilot.ajaxGetUtil('/bUser/queryBUserByPagination', {
+            rows: this.pageSize,
+            page: this.pageNu
+          }, res => {
             console.log(res)
-            if (res.code == 200) {
-              that.$notify({
-                title: ' 提示信息 ',
-                message: res.message,
+            this.tableData = res.rows
+            this.pages = res.pages
+          }, err => {
+            console.log(err);
+          }
+        )
+      },
+      // 搜索
+      SearchData(){
+        this.pilot.ajaxGetUtil('/bUser/queryStaffByCriteria', {
+            rows: this.pageSize,
+            page: this.pageNu,
+            name: this.search.name,
+            utype: this.search.utype
+          }, res => {
+            console.log(this.search.utype)
+            this.tableData = res.rows
+            this.pages = res.pages
+          }, err => {
+            alert('err');
+          }
+        )
+      },
+      // 删除
+      del(id){
+        console.log(id);
+        let that = this;
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.pilot.ajaxDeleteUtil('/bUser/del/' + id, {}, res => {
+              console.log(res)
+              if (res.code == 200) {
+                that.$notify({
+                  title: ' 提示信息 ',
+                  message: res.message,
+                });
+                this.getData();
+              } else {
+                that.$notify.warning({
+                  title: '警告',
+                  message: '删除失败' + err,
+                  duration: 2000
+                });
+              }
+            },
+            err => {
+              this.$notify.error({
+                title: '错误',
+                message: '网络错误' + err,
               });
+            })
+  //
+        }).catch(() => {
+
+        });
+
+      },
+
+      getAllData(){
+        this.pilot.ajaxGetUtil('/bUser/queryBUserByPagination', {
+            //params
+            rows: 999,
+            page: this.pageNu
+          }, res => {
+            this.levelParent = [];
+            for (let i = 0; i < res.rows.length; i++) {
+              if (res.rows[i].sex === "0") {
+                this.levelParent.push(res.rows[i]);
+              }
+            }
+          }, err => {
+            this.$notify.error({
+              title: '错误',
+              message: '网络错误',
+              duration: 2000
+            });
+          }
+        )
+      },
+      // 新增
+      add(){
+
+
+        this.$refs.tableForm.validate((valid) => {
+            if (!valid) return false
+            this.pilot.ajaxPostUtil('/auth/register', {
+                    loginName: this.tableForm.loginName,
+                    password: this.tableForm.password,
+                    name: this.tableForm.name,
+                    roleId: this.tableForm.roleId,
+                    sex: this.tableForm.sex,
+                    idNumber: this.tableForm.idNumber,
+                    phone: this.tableForm.phone,
+                    email: this.tableForm.email,
+                    utype: this.tableForm.utype,
+                    ucollege: this.tableForm.ucollege,
+                    uworkdate: this.tableForm.uworkdate
+                  }, res => {
+                    console.log(this.tableForm.uworkdate)
+                    if (res.code == 200) {
+                      this.$notify.success({
+                        title: '提示',
+                        message: res.message,
+                        duration: 2000
+                      });
+                      // 清空表单
+                      this.resetForm();
+                      $('#tableModal').modal('hide');
+                      this.getData();
+                    } else {
+                      this.$notify.warning({
+                        title: '警告',
+                        message: res.message,
+                        duration: 2000
+                      });
+                    }
+                  }, err => {
+                    console.log(err);
+                  }
+                )}
+          )
+      },
+      // 修改
+      edit(item){
+        console.log(item);
+        this.tableForm.name = item.name
+        this.tableForm.businessId = item.businessId
+        this.tableForm.phone = item.phone
+        this.tableForm.sex = item.sex
+        this.tableForm.email = item.email
+        this.tableForm.utype = item.utype
+        this.tableForm.ucollege = item.ucollege
+        this.tableForm.roleId = item.roleId
+        this.tableForm.idNumber = item.idNumber
+        this.tableForm.uworkdate = item.uworkdate
+      },
+    modify(){
+      this.$refs.tableForm2.validate((valid) => {
+        if (!valid) return false
+        this.pilot.ajaxPutUtil('/bUser/alter/' + this.tableForm.businessId, {
+            businessId: this.tableForm.businessId,
+            name: this.tableForm.name,
+            sex: this.tableForm.sex,
+            phone: this.tableForm.phone,
+            email: this.tableForm.email,
+            utype: this.tableForm.utype,
+            ucollege: this.tableForm.ucollege,
+            roleId: this.tableForm.roleId,
+            idNumber: this.tableForm.idNumber,
+            uworkdate: this.tableForm.uworkdate
+
+          }, res => {
+            console.log(this.tableForm.roleId)
+            console.log(this.tableForm.uworkdate)
+            if (res.code == 200) {
+              this.$notify.success({
+                title: '提示',
+                message: '操作成功',
+                duration: 2000
+              });
+              // 清空表单
+//            this.resetForm();
+              $('#tableModal2').modal('hide');
               this.getData();
             } else {
-              that.$notify.warning({
+              this.$notify.warning({
                 title: '警告',
-                message: '删除失败' + err,
+                message: res.message,
                 duration: 2000
               });
             }
-          },
-          err => {
-            this.$notify.error({
-              title: '错误',
-              message: '网络错误' + err,
-            });
-          })
-//          this.$message({
-//            type: 'success',
-//            message: '删除成功!'
-//          });
-      }).catch(() => {
-//          this.$message({
-//            type: 'info',
-//            message: '已取消删除'
-//          });
-      });
-
-    },
-    // 新增
-    getAllData(){
-      this.pilot.ajaxGetUtil('/bUser/queryBUserByPagination', {
-          //params
-          rows: 999,
-          page: this.pageNu
-        }, res => {
-          this.levelParent = [];
-          for (let i = 0; i < res.rows.length; i++) {
-            if (res.rows[i].sex === "0") {
-              this.levelParent.push(res.rows[i]);
-            }
+          }, err => {
+            console.log(err);
           }
 
-        }, err => {
-          this.$notify.error({
-            title: '错误',
-            message: '网络错误',
-            duration: 2000
-          });
-        }
-      )
-    },
-
-    add(){
-      this.pilot.ajaxPostUtil('/auth/register', {
-          loginName: this.tableForm.loginName,
-          password: this.tableForm.password,
-          name: this.tableForm.name,
-          roleId: this.tableForm.roleId,
-          sex: this.tableForm.sex,
-          idNumber: this.tableForm.idNumber,
-          phone: this.tableForm.phone,
-          email: this.tableForm.email,
-          utype: this.tableForm.utype,
-          ucollege: this.tableForm.ucollege,
-          uworkdate: this.tableForm.uworkdate
-        }, res => {
-          console.log(this.tableForm.uworkdate)
-          if (res.code == 200) {
-            this.$notify.success({
-              title: '提示',
-              message: res.message,
-              duration: 2000
-            });
-            // 清空表单
-            this.resetForm();
-            $('#tableModal').modal('hide');
-            this.getData();
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.message,
-              duration: 2000
-            });
-          }
-        }, err => {
-          console.log(err);
-        }
-      )
-    },
-    // 修改
-    edit(item){
-      console.log("edit------------")
-      console.log(item.role_id)
-      this.tableForm.name = item.name
-      this.tableForm.businessId = item.businessId
-      this.tableForm.phone = item.phone
-      this.tableForm.sex = item.sex
-      this.tableForm.email = item.email
-      this.tableForm.utype = item.utype
-      this.tableForm.ucollege = item.ucollege
-      this.tableForm.roleId = item.role_id
-      this.tableForm.idNumber = item.idNumber
-      this.tableForm.uworkdate = item.uworkdate
-
-
-    },
-    modify(){
-      this.pilot.ajaxPutUtil('/bUser/alter/' + this.tableForm.businessId, {
-          businessId: this.tableForm.businessId,
-          name: this.tableForm.name,
-          sex: this.tableForm.sex,
-          phone: this.tableForm.phone,
-          email: this.tableForm.email,
-          utype: this.tableForm.utype,
-          ucollege: this.tableForm.ucollege,
-          roleId: this.tableForm.roleId,
-          idNumber: this.tableForm.idNumber,
-          uworkdate: this.tableForm.uworkdate
-
-        }, res => {
-          console.log(this.tableForm.roleId)
-          console.log(this.tableForm.uworkdate)
-          if (res.code == 200) {
-            this.$notify.success({
-              title: '提示',
-              message: res.message,
-              duration: 2000
-            });
-            // 清空表单
-//            this.resetForm();
-            $('#tableModal2').modal('hide');
-            this.getData();
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.message,
-              duration: 2000
-            });
-          }
-        }, err => {
-          console.log(err);
-        }
+        )}
       )
     },
     // 表单重置
@@ -683,7 +704,8 @@
         this.tableForm.phone = '',
         this.tableForm.email = '',
         this.tableForm.utype = 0,
-        this.tableForm.uworkdate = ''
+        this.tableForm.uworkdate = '',
+      this.tableForm.unworkdate = ''
     },
     // 切换
     toggleTabs(index) {
@@ -703,56 +725,50 @@
         this.pageNu -= 1;
         this.getData();
       }
-    }
+    },
+      resignlist(val){
+        this.multipleSelection = val;
+      },
+      // 离职
+      resign(){
+        if(this.multipleSelection.length===0){
+          this.$notify({
+            title: '警告',
+            message: '请先勾选用户',
+            type: 'warning'
+          })
+        }else{
+          let userList = [];
+          for(let i=0;i<this.multipleSelection.length;i++){
+            userList.push(this.multipleSelection[i].businessId);
+          }
+          userList = userList.join(',');
+          this.pilot.ajaxGetUtil('/bUser/dismiss',{
+              userIds:userList
+          },res=>{
+              if(res.code===200){
+                this.$notify.success({
+                  title: '提示',
+                  message: '成功离职',
+                })
+                this.getData();
+              }else{
+                this.$notify.warning({
+                  title: '警告',
+                  message: '操作失败',
+                })
+              }
+          },err=>{
+            this.$notify.error({
+              title: '错误',
+              message: '网络错误'
+            })
+          })
+        }
+      },
 
 
 
-
-
-      //批量删除
-//      selsChange(sels) {
-//        this.sels = sels
-//      },
-//     delGroup(){
-//       var ids = this.sels.map(item => item.id).join()//获取所有选中行的id组成的字符串，以逗号分隔
-//       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-//         confirmButtonText: '确定',
-//         cancelButtonText: '取消',
-//         type: 'warning'
-//       }).then(() => {
-//         this.pilot.ajaxDeleteUtil('/bUser/del/' + id, {}, res => {
-//             console.log(res)
-//             if (res.code == 200) {
-//               that.$notify({
-//                 title: ' 提示信息 ',
-//                 message: res.message,
-//               });
-//               this.getData();
-//             } else {
-//               that.$notify.warning({
-//                 title: '警告',
-//                 message: '删除失败' + err,
-//                 duration: 2000
-//               });
-//             }
-//           },
-//           err => {
-//             this.$notify.error({
-//               title: '错误',
-//               message: '网络错误' + err,
-//             });
-//           })
-////          this.$message({
-////            type: 'success',
-////            message: '删除成功!'
-////          });
-//       }).catch(() => {
-////
-//       });
-//     },
-//      handleCurrentChange(row, event, column) {
-//        this.$refs.table.toggleRowSelection(row)
-//      },
   },
 
     mounted() {

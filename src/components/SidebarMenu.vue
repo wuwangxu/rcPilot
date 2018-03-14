@@ -3,8 +3,8 @@
     <li class="header">Users</li>
     <li class="treeview">
       <a href="#">
-        <i class="glyphicon glyphicon-user"></i>
-        <span>用户管理</span>
+        <i ></i>
+        <span class="fa fa-user-o">用户管理</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left fa-fw pull-right"></i>
         </span>
@@ -13,7 +13,7 @@
         <li>
           <a href="#">
           <router-link tag="li" class="pageLink" to="/users">
-            <i class="fa fa-file-word-o"></i> 用户信息
+            <i class="fa fa-user-o "></i> 用户信息
           </router-link>
           </a>
         </li>
@@ -36,7 +36,7 @@
 
           <a href="#">
             <router-link tag="li" class="pageLink" to="/ostables">
-            <i class="fa fa-circle"></i> 操作系统
+            <i class="fa fa-tasks"></i> 操作系统
             </router-link>
           </a>
 
@@ -173,5 +173,10 @@ export default {
     100% {
       transform: rotate(-90deg);
     }
+  }
+  .pageLink{
+    height: 37px;
+    padding: 10px;
+
   }
 </style>
