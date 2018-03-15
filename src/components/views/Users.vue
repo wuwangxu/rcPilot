@@ -10,7 +10,7 @@
     <form class="navbar-form navbar-left">
 
       <div class="form-group">
-        <div class="col-md-5 col-sm-5">
+        <div class="col-md-4 col-sm-4">
           <el-select v-model="search.utype" placeholder="请选择用户类型" >
           <el-option
             v-for="item in options"
@@ -20,10 +20,13 @@
           </el-option>
         </el-select>
         </div>
-        <div class="col-md-7 col-sm-7">
+        <div class="col-md-8 col-sm-8">
          <input type="text" class="form-control" placeholder="请输入姓名" v-model="search.name" style="border-radius: 5px">
         <!--<input type="text" class="form-control" placeholder="请输入用户类型" v-model="search.utype">-->
-      <input type="button" class="btn btn-default" @click="SearchData" value="查询"></div>
+      <input type="button" class="btn btn-default" @click="SearchData" value="查询">
+          <input type="button" class="btn btn-default" @click="resetSearch" value="重置">
+        </div>
+
       </div>
     </form>
      </div>
@@ -766,6 +769,11 @@
           })
         }
       },
+      resetSearch(){
+        this.search.name='',
+        this.search.utype=''
+        this.getData();
+      }
 
 
 
