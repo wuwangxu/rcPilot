@@ -75,28 +75,15 @@
               </el-table-column>
             </el-table>
 
-            <nav aria-label="Page navigation" class="pull-right nav-pageing">
-              <ul class="pagination">
-                <li class="page-item"
-                    :class="{disabled:pageNu===1}"
-                    :disabled="pageNu===0"
-                    @click="lastTab">
-                  <a class="page-link" tabindex="-1">上一页</a>
-                </li>
-                <li v-for="(item,index) in pages"
-                    class="page-item"
-                    :class="{active:pageNu===index+1}"
-                    @click="toggleTabs(index)">
-                  <a class="page-link">{{index+1}}</a>
-                </li>
-                <li class="page-item"
-                    :class="{disabled:pageNu===pages}"
-                    :disabled="{disabled:pageNu===pages}"
-                    @click="nextTab">
-                  <a class="page-link">下一页</a>
-                </li>
-              </ul>
-            </nav>
+            <div aria-label="..." class="pull-right nav-pageing">
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :pageSize="pageSize"
+                @current-change="handleCurrentChange"
+                :total="total">
+              </el-pagination>
+            </div>
             <!-- /.box-body -->
           </div>
         </div>
@@ -206,6 +193,7 @@
         pages: '', //分页
         pageNu: 1,
         pageSize: 10,
+        total:0,
         message: '',
         rules: {
           code: [{
@@ -466,6 +454,16 @@
       },
       formatCreateDate: function (row, column) {
         return this.formatDate(row.createDate)
+      },
+      //分页
+      handleCurrentChange(val) {
+        this.pageNu = val;
+        if (this.isSearch) {
+          this.SearchData();
+        } else {
+          this.getData();
+        }
+        // console.log(`当前页: ${val}`);
       },
 
     }

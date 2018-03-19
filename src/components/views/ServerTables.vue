@@ -765,7 +765,7 @@
         } else {
           this.getData();
         }
-        console.log(`当前页: ${val}`);
+        // console.log(`当前页: ${val}`);
       },
       //category数据转换
       formatCategory: function (row, column) {
