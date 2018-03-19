@@ -5,7 +5,6 @@
 <template>
   <section class="content">
     <div class="row center-block">
-      <h2>服务器</h2>
       <div class="col-md-12">
         <div class="box">
           <div class="box-header">
@@ -18,11 +17,14 @@
                   <!--<input type="text" class="form-control" placeholder="请输入系统名" v-model="search.name">-->
                   <!--<input type="text" class="form-control" placeholder="请输入标签" v-model="search.tag">-->
                   <el-form-item>
-                    <el-input
-                      placeholder="请输入系统名"
-                      v-model="search.name"
-                      clearable>
-                    </el-input>
+                    <el-select v-model="search.businessId" placeholder="请选择所属系统">
+                      <el-option
+                        v-for="item in osoptions"
+                        :key="item.businessId"
+                        :label="item.name"
+                        :value="item.businessId">
+                      </el-option>
+                    </el-select>
                   </el-form-item>
 
                   <el-form-item>
@@ -43,16 +45,19 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="SearchData">查询</el-button>
-                    <el-button type="primary" @click="resetSearch">重置</el-button>
+                    <el-button type="primary" size="medium" @click="SearchData">查询</el-button>
+                    <el-button size="medium" @click="resetSearch">重置</el-button>
                   </el-form-item>
                   <!--</form>-->
                 </el-form>
               </div>
               <div class="pull-right col-md-1">
-                <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal"
-                        @click="getOsData" style="margin-top: 19px"> 新增
-                </button>
+                <!--<button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal"-->
+                <!--@click="getOsData" style="margin-top: 19px"> 新增-->
+                <!--</button>-->
+                <el-button type="primary" size="medium" @click="getOsData" data-toggle="modal" data-target="#tableModal"
+                           style="margin-top: 2px">新增
+                </el-button>
               </div>
             </div>
           </div>
@@ -67,7 +72,7 @@
                       <span>{{ formatCategory(props.row) }}</span>
                     </el-form-item>
                     <el-form-item label="所属系统">
-                      <span>{{ props.row.name }}</span>
+                      <span>{{ props.row.osname }}</span>
                     </el-form-item>
                     <el-form-item label="品牌">
                       <span>{{ props.row.brand }}</span>
@@ -98,10 +103,10 @@
                       <span>{{ formatDate(props.row.endTime) }}</span>
                     </el-form-item>
                     <el-form-item label="创建者">
-                      <span>{{ props.row.createBy }}</span>
+                      <span>{{ props.row.creator }}</span>
                     </el-form-item>
                     <el-form-item label="更新者">
-                      <span>{{ props.row.updateBy }}</span>
+                      <span>{{ props.row.updater }}</span>
                     </el-form-item>
                     <el-form-item label="更新时间">
                       <span>{{ formatDate(props.row.updateDate) }}</span>
@@ -114,11 +119,11 @@
                     <el-form-item label="标签">
                       <span>{{ props.row.tag }}</span>
                     </el-form-item>
-                    <el-form-item label="备注">
-                      <textarea placeholder="暂无备注" disabled>{{props.row.remarks}}</textarea>
-                    </el-form-item>
                   </el-form>
                 </template>
+              </el-table-column>
+              <el-table-column
+                type="index">
               </el-table-column>
               <el-table-column
                 label="服务器"
@@ -127,7 +132,7 @@
               </el-table-column>
               <el-table-column
                 label="所属系统"
-                prop="name">
+                prop="osname">
               </el-table-column>
               <el-table-column
                 label="状态">
@@ -151,35 +156,45 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal"
-                     data-target="#tableModal2"></a>
-                  <a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>
+                  <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal"-->
+                  <!--data-target="#tableModal2"></a>-->
+                  <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>-->
+                  <el-button size="mini" @click="edit(scope.row)" data-toggle="modal" data-target="#tableModal2">编辑
+                  </el-button>
+                  <el-button size="mini" type="danger" @click="del(scope.row.businessId)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
 
-            <nav aria-label="..." class="pull-right nav-pageing">
-              <ul class="pagination">
-                <li class="page-item"
-                    :class="{disabled:pageNu===1}"
-                    :disabled="pageNu===0"
-                    @click="lastTab">
-                  <a class="page-link" tabindex="-1">上一页</a>
-                </li>
-                <li v-for="(item,index) in pages"
-                    class="page-item"
-                    :class="{active:pageNu===index+1}"
-                    @click="toggleTabs(index)">
-                  <a class="page-link">{{index+1}}</a>
-                </li>
-                <li class="page-item"
-                    :class="{disabled:pageNu===pages}"
-                    :disabled="{disabled:pageNu===pages}"
-                    @click="nextTab">
-                  <a class="page-link">下一页</a>
-                </li>
-              </ul>
-            </nav>
+            <div aria-label="..." class="pull-right nav-pageing">
+              <!--<ul class="pagination">-->
+              <!--<li class="page-item"-->
+              <!--:class="{disabled:pageNu===1}"-->
+              <!--:disabled="pageNu===0"-->
+              <!--@click="lastTab">-->
+              <!--<a class="page-link" tabindex="-1">上一页</a>-->
+              <!--</li>-->
+              <!--<li v-for="(item,index) in pages"-->
+              <!--class="page-item"-->
+              <!--:class="{active:pageNu===index+1}"-->
+              <!--@click="toggleTabs(index)">-->
+              <!--<a class="page-link">{{index+1}}</a>-->
+              <!--</li>-->
+              <!--<li class="page-item"-->
+              <!--:class="{disabled:pageNu===pages}"-->
+              <!--:disabled="{disabled:pageNu===pages}"-->
+              <!--@click="nextTab">-->
+              <!--<a class="page-link">下一页</a>-->
+              <!--</li>-->
+              <!--</ul>-->
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :pageSize="pageSize"
+                @current-change="handleCurrentChange"
+                :total="total">
+              </el-pagination>
+            </div>
             <!-- /.box-body -->
           </div>
         </div>
@@ -202,6 +217,7 @@
                       <el-select v-model="tableForm.businessId" placeholder="请选择所属系统">
                         <el-option
                           v-for="item in osoptions"
+                          v-if="item.businessId!=' '"
                           :key="item.businessId"
                           :label="item.name"
                           :value="item.businessId">
@@ -213,7 +229,8 @@
                     </el-form-item>
                     <el-form-item label="服务器" prop="category">
                       <el-select v-model="tableForm.category" placeholder="请选择服务器 ">
-                        <el-option v-for="item in categoryoptions" :key="item.category" :label="item.label"
+                        <el-option v-for="item in categoryoptions" v-if="item.category!=' '"
+                                    :key="item.category" :label="item.label"
                                    :value="item.category">
                         </el-option>
                       </el-select>
@@ -288,6 +305,7 @@
                     <el-select v-model="tableForm.name" placeholder="请选择所属系统">
                       <el-option
                         v-for="item in osoptions"
+                        v-if="item.businessId!=' '"
                         :key="item.name"
                         :label="item.name"
                         :value="item.name">
@@ -299,7 +317,8 @@
                   </el-form-item>
                   <el-form-item label="服务器" prop="category">
                     <el-select v-model="tableForm.category" placeholder="请选择服务器 ">
-                      <el-option v-for="item in categoryoptions" :key="item.category" :label="item.label"
+                      <el-option v-for="item in categoryoptions" v-if="item.category!=' '"
+                                 :key="item.category" :label="item.label"
                                  :value="item.category">
                       </el-option>
                     </el-select>
@@ -383,7 +402,11 @@
           }, {
             category: '3',
             label: '其他服务器'
-          }
+          },{
+            category: ' ',
+            label: '所有服务器'
+          },
+
         ],//服务器列表
         tableForm: {    //弹出框表单
           businessId: '',
@@ -414,10 +437,11 @@
         pages: '', //分页
         pageNu: 1,
         pageSize: 10,
+        total: 0,
         message: '',
-        isSearch:false,
+        isSearch: false,
         search: {
-          name: '',
+          businessId: '',
           tag: '',
           category: ''
         },
@@ -489,7 +513,8 @@
     },
     mounted() {
 
-      this.getData()
+      this.getData();
+      this.getOsData();
     },
     methods: {
       getData() {
@@ -505,9 +530,11 @@
           page: this.pageNu,
           // sort:'seq'
         }, res => {
-          this.tableData = res.rows
-          this.pages = Math.ceil(res.total / this.pageSize)
-          loading.close()
+          this.tableData = res.rows;
+          console.log(this.tableData);
+          this.pages = Math.ceil(res.total / this.pageSize);
+          this.total = res.total;
+          loading.close();
         }, err => {
           loading.close();
           this.$notify.error({
@@ -624,7 +651,6 @@
       //修改
       edit(item) {
         // console.log(item)
-        this.getOsData();
         this.tableForm.name = item.name;
         this.tableForm.brand = item.brand;
         // this.tableForm.category=item.category;
@@ -731,38 +757,16 @@
         this.tableForm.endTime = '';
         this.tableForm.status = '';
       },
-      //切换
-      toggleTabs(index) {
-        this.pageNu = index + 1;
-        if(this.isSearch){
+      //分页
+      handleCurrentChange(val) {
+        this.pageNu = val;
+        if (this.isSearch) {
           this.SearchData();
-        }else {
+        } else {
           this.getData();
         }
+        console.log(`当前页: ${val}`);
       },
-      //下一页
-      nextTab() {
-        if (this.pageNu !== this.pages) {
-          this.pageNu += 1;
-          if(this.isSearch){
-            this.SearchData();
-          }else {
-            this.getData();
-          }
-        }
-      },
-      //上一页
-      lastTab() {
-        if (this.pageNu !== 1) {
-          this.pageNu -= 1;
-          if(this.isSearch){
-            this.SearchData();
-          }else {
-            this.getData();
-          }
-        }
-      },
-
       //category数据转换
       formatCategory: function (row, column) {
         return row.category == 0 ? '讯达云' : row.category == 1 ? '华为云' : row.category == 2 ? '519服务器' : '其他服务器';
@@ -778,15 +782,6 @@
         // return this.pilot.formatDateString(date);
         return this.pilot.transTime(date, 2)
       },
-      //createDate转换
-      formatCreateDate: function (row, column) {
-        return this.formatDate(row.createDate)
-      },
-      //updateDate转换
-      formatCreateDate: function (row, column) {
-        return this.formatDate(row.updateDate)
-      },
-
       formatDate2: function (datetime) {
         var now = new Date(Number(datetime));
         var year = now.getYear() - 100;
@@ -807,19 +802,20 @@
       },
       // 搜索
       SearchData() {
-        if(!this.isSearch){
-        this.isSearch=true;
-        this.pageNu=1;
+        if (!this.isSearch) {
+          this.isSearch = true;
+          this.pageNu = 1;
         }
         this.pilot.ajaxGetUtil('bserver/queryByCriteria', {
             rows: this.pageSize,
             page: this.pageNu,
-            name: this.search.name,
+            osId: this.search.businessId.trim(),
             tag: this.search.tag,
-            category: this.search.category
+            category: this.search.category.trim()
           }, res => {
-            this.tableData = res.rows
-            this.pages = Math.ceil(res.total / this.pageSize)
+            this.tableData = res.rows;
+            this.pages = Math.ceil(res.total / this.pageSize);
+            this.total = res.total;
           }, err => {
             alert('err');
           }
@@ -827,11 +823,11 @@
       },
       //重置search表单
       resetSearch: function () {
-        this.search.name = '';
+        this.search.businessId = '';
         this.search.tag = '';
         this.search.category = '';
-        this.isSearch=false;
-        this.pageNu=1;
+        this.isSearch = false;
+        this.pageNu = 1;
         this.getData();
       },
       //获取系统名和businessId
@@ -845,7 +841,13 @@
           // sort:'seq'
         }, res => {
           this.osoptions = res.rows;
-          console.log(this.osoptions);
+          this.osoptions.push(
+            {
+              businessId: ' ',
+              name: '所有系统'
+            }
+          )
+          // console.log(this.osoptions);
         }, err => {
           // console.log(res)
           this.$notify.error({
@@ -854,7 +856,7 @@
             duration: 2000
           });
         })
-      }
+      },
 
     },
     computed: {}
@@ -910,7 +912,7 @@
     width: 30%;
   }
 
-  .add-modalForm, .edit-modalForm{
+  .add-modalForm, .edit-modalForm {
     padding-left: 1em;
     padding-right: 5em;
   }

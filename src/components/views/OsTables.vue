@@ -5,61 +5,75 @@
 <template>
   <section class="content">
     <div class="row center-block">
-      <h2>操作系统</h2>
       <div class="col-md-12">
         <div class="box">
           <div class="box-header">
             <h3 class="box-title">操作系统列表</h3>
             <div class="pull-right">
-              <button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal" @click="resetRuleForm">
-                新增
-              </button>
+              <el-button type="primary" size="medium" @click="resetRuleForm" data-toggle="modal" data-target="#tableModal" style="margin-top: 2px">新增</el-button>
             </div>
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive" style="height: 100%;">
-            <table id="example2" class="table table-bordered table-hover text-center"
-                   style="word-break:break-all; word-wrap:break-word;">
-              <thead>
-              <tr>
-                <th>操作系统编号</th>
-                <th>操作系统名称</th>
-                <!--<th>操作系统ID</th>-->
-                <th class="hidden-xs">创建者</th>
-                <th class="hidden-xs">创建时间</th>
-                <th class="hidden-xs">更新者</th>
-                <th>更新时间</th>
-                <th>启用状态</th>
-                <th>备注</th>
-                <!--<th>删除</th>-->
-                <th>操作</th>
-              </tr>
-              </thead>
-              <tbody style="height:100%;">
-              <tr v-for="(item,index) in tableData">
-                <td>{{item.code}}</td>
-                <td>{{item.name}}</td>
-                <!--<td>{{item.businessId}}</td>-->
-                <td class="hidden-xs">{{item.createBy}}</td>
-                <td class="hidden-xs">{{formatDate(item.createDate)}}</td>
-                <td class="hidden-xs">{{item.updateBy}}</td>
-                <td>{{formatDate(item.updateDate)}}</td>
-                <td><!--{{item.flag==1 ? ''}}-->
-                  <i class="fa fa-circle" v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>
+            <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="right" inline class="demo-table-expand text-center">
+                    <el-form-item label="操作系统编号">
+                      <span>{{ props.row.code }}</span>
+                    </el-form-item>
+                    <el-form-item label="操作系统名称">
+                      <span>{{ props.row.name }}</span>
+                    </el-form-item>
+                    <el-form-item label="创建者">
+                      <span>{{ props.row.creator }}</span>
+                    </el-form-item>
+                    <el-form-item label="创建时间">
+                      <span>{{ formatDate(props.row.createDate) }}</span>
+                    </el-form-item>
+                    <el-form-item label="更新者">
+                      <span>{{ props.row.updater }}</span>
+                    </el-form-item>
+                    <el-form-item label="更新时间">
+                      <span>{{ formatDate(props.row.updateDate) }}</span>
+                    </el-form-item>
+                    <el-form-item label="启用状态">
+                      <span class="fa fa-circle" v-bind:class="[{'text-green':props.row.flag==1},{'text-danger':props.row.flag==0}]">{{props.row.flag==1 ? '开启':'关闭'}}</span>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                      <el-input
+                        type="textarea"
+                        :rows="2"
+                        placeholder="暂无备注"
+                        v-model="props.row.remarks"
+                      :disabled="true">
+                      </el-input>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column
+                type="index">
+              </el-table-column>
+              <el-table-column label="操作系统编号" prop="code">
+              </el-table-column>
+              <el-table-column label="操作系统名称" prop="name">
+              </el-table-column>
+              <el-table-column label="创建时间" prop="createDate" :formatter="formatCreateDate">
+              </el-table-column>
+              <el-table-column label="状态">
+                <template slot-scope="scope">
+                  <i class="fa fa-circle text-green" v-if="scope.row.flag==1" /><i class="fa fa-circle text-danger" v-if="scope.row.flag==0" />
+                </template>
+              </el-table-column>
 
-                </td>
-                <td>{{item.remarks}}</td>
-                <!--<td>{{item.delFlag}}</td>-->
-                <!--<td>{{item.isTop==='1'?'一级':'二级'}}</td>-->
-                <!--<td>{{item.remarks}}</td>-->
-                <td>
-                  <a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(item)" data-toggle="modal"
-                     data-target="#tableModal2"></a>
-                  <a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(item.businessId)"></a>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button size="mini" @click="edit(scope.row)" data-toggle="modal" data-target="#tableModal2">编辑</el-button>
+                  <el-button size="mini" type="danger" @click="del(scope.row.businessId)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
 
             <nav aria-label="Page navigation" class="pull-right nav-pageing">
               <ul class="pagination">
@@ -242,7 +256,7 @@
           this.pages = Math.ceil(res.total / this.pageSize)
           loading.close()
         }, err => {
-          console.log(res)
+          // console.log(res)
           loading.close();
           this.$notify.error({
             title: '错误',
@@ -449,7 +463,10 @@
       formatDate: function (date) {
         // return this.pilot.formatDateString(date);
         return this.pilot.transTime(date, 2)
-      }
+      },
+      formatCreateDate: function (row, column) {
+        return this.formatDate(row.createDate)
+      },
 
     }
 
@@ -496,4 +513,20 @@
     padding-left: 1em;
     padding-right: 5em;
   }
+  .demo-table-expand {
+    font-size: 0;
+  }
+
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+    text-align: right;
+  }
+
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+
 </style>
