@@ -5,6 +5,11 @@ import 'es6-promise/auto'
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+Vue.config.productionTip = false
+
+// 引入字体库
+import 'font-awesome/scss/font-awesome.scss'
+
 import { sync } from 'vuex-router-sync'
 import routes from './routes'
 import store from './store'
@@ -27,7 +32,7 @@ Vue.use(ElementUI)  /*   使用框架  */
 // Axios
 import axios from 'axios'
 Vue.prototype.axios = axios  /*   this.axios  */
-
+Vue.prototype.$route = routes
 // 引入url
 const preUrl = require('../config/url')
 Vue.prototype.globalUrl = preUrl.interfaceUrl
@@ -50,20 +55,16 @@ var router = new VueRouter({
   }
 })
 
-// Some middleware to help us ensure the user is authenticated.
 router.beforeEach((to, from, next) => {
   // if (to.matched.some(record => record.meta.requiresAuth) && (!router.app.$store.state.token || router.app.$store.state.token === 'null')) {
-  //   // this route requires auth, check if logged in
-  //   // if not, redirect to login page.
-  //   window.console.log('Not authenticated')
-  //   next({
+  //     next({
   //     // path: '/login',
   //     // query: { redirect: to.fullPath }
   //   })
   // } else {
   //   next()
   // }
-
+  //
    // 获取登录状态
   function isLogin() {
     return sessionStorage.getItem('token')   /* 获取token值 */
@@ -72,7 +73,7 @@ router.beforeEach((to, from, next) => {
   let _null = null
   if (to.meta.requiresAuth && isLogin() === _null) {  /* 如果需要登陆并且登陆内容为空 */
     router.push({
-      'path': '/login'
+       'path': '/login'
     })
   } else {
     next()
