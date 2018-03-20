@@ -1,293 +1,188 @@
 <template>
   <section class="content">
-    <div class="row center-block">
-      <div class="col-md-12">
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">服务器列表</h3>
-            <div class="row">
-              <div class="col-md-11">
-                <el-form :inline="true" :model="search" class="demo-form-inline">
-                  <!--<form class="navbar-form navbar-left form-inline">-->
-                  <!--<div class="form-group">-->
-                  <!--<input type="text" class="form-control" placeholder="请输入系统名" v-model="search.name">-->
-                  <!--<input type="text" class="form-control" placeholder="请输入标签" v-model="search.tag">-->
-                  <el-form-item>
-                    <el-select v-model="search.businessId" placeholder="请选择所属系统">
-                      <el-option
-                        v-for="item in osoptions"
-                        :key="item.businessId"
-                        :label="item.name"
-                        :value="item.businessId">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
+    <div class=" center-block header">
+      <div class="col-md-12" style="padding: 10px 0px 0px 10px;">
+        <el-form :inline="true" :model="search" class="demo-form-inline col-md-11">
+          <el-form-item>
+            <el-select v-model="search.businessId" placeholder="请选择所属系统">
+              <el-option
+                v-for="item in osoptions"
+                :key="item.businessId"
+                :label="item.name"
+                :value="item.businessId">
+              </el-option>
+            </el-select>
+          </el-form-item>
 
-                  <el-form-item>
-                    <el-input
-                      placeholder="请输入标签"
-                      v-model="search.tag"
-                      clearable>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-select v-model="search.category" placeholder="选择服务器">
-                      <el-option
-                        v-for="item in categoryoptions"
-                        :key="item.category"
-                        :label="item.label"
-                        :value="item.category">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" size="medium" @click="SearchData">查询</el-button>
-                    <el-button size="medium" @click="resetSearch">重置</el-button>
-                  </el-form-item>
-                  <!--</form>-->
-                </el-form>
-              </div>
-              <div class="pull-right col-md-1">
-                <!--<button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal"-->
-                <!--@click="getOsData" style="margin-top: 19px"> 新增-->
-                <!--</button>-->
-                <!--<el-button type="primary" size="medium" @click="getOsData" data-toggle="modal" data-target="#tableModal"-->
-                           <!--style="margin-top: 2px">新增-->
-                <!--</el-button>-->
+          <el-form-item>
+            <el-input
+              placeholder="请输入标签"
+              v-model="search.tag"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="search.category" placeholder="选择服务器">
+              <el-option
+                v-for="item in categoryoptions"
+                :key="item.category"
+                :label="item.label"
+                :value="item.category">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="medium" @click="SearchData">查询</el-button>
+            <el-button size="medium" @click="resetSearch">重置</el-button>
+          </el-form-item>
+          <!--</form>-->
+        </el-form>
 
-                <el-button type="primary" size="medium" @click="skip('addservertable')">新增</el-button>
+        <div class="pull-right col-md-1">
+          <el-button type="primary" size="medium" @click="skip('addservertable')">新增</el-button>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body table-responsive " style="height: 100%;">
+      <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
 
-              </div>
-            </div>
-          </div>
-          <!-- /.box-header -->
-          <div class="box-body table-responsive " style="height: 100%;">
-            <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
-
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <el-form label-position="left" inline class="demo-table-expand text-center">
-                    <el-form-item label="服务器">
-                      <span>{{ formatCategory(props.row) }}</span>
-                    </el-form-item>
-                    <el-form-item label="所属系统">
-                      <span>{{ props.row.osname }}</span>
-                    </el-form-item>
-                    <el-form-item label="品牌">
-                      <span>{{ props.row.brand }}</span>
-                    </el-form-item>
-                    <el-form-item label="CPU">
-                      <span>{{ props.row.cpu }}</span>
-                    </el-form-item>
-                    <el-form-item label="内存">
-                      <span>{{ props.row.memory }}</span>
-                    </el-form-item>
-                    <el-form-item label="硬盘">
-                      <span>{{ props.row.disk }}</span>
-                    </el-form-item>
-                    <el-form-item label="带宽">
-                      <span>{{ props.row.broadband }}</span>
-                    </el-form-item>
-                    <el-form-item label="内网IP">
-                      <span>{{ props.row.intranetIp }}</span>
-                    </el-form-item>
-                    <el-form-item label="外网IP">
-                      <span>{{ props.row.extranetIp }}</span>
-                    </el-form-item>
-                    <el-form-item label="服务器状态">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand text-center">
+              <el-form-item label="服务器">
+                <span>{{ formatCategory(props.row) }}</span>
+              </el-form-item>
+              <el-form-item label="所属系统">
+                <span>{{ props.row.osname }}</span>
+              </el-form-item>
+              <el-form-item label="品牌">
+                <span>{{ props.row.brand }}</span>
+              </el-form-item>
+              <el-form-item label="CPU">
+                <span>{{ props.row.cpu }}</span>
+              </el-form-item>
+              <el-form-item label="内存">
+                <span>{{ props.row.memory }}</span>
+              </el-form-item>
+              <el-form-item label="硬盘">
+                <span>{{ props.row.disk }}</span>
+              </el-form-item>
+              <el-form-item label="带宽">
+                <span>{{ props.row.broadband }}</span>
+              </el-form-item>
+              <el-form-item label="内网IP">
+                <span>{{ props.row.intranetIp }}</span>
+              </el-form-item>
+              <el-form-item label="外网IP">
+                <span>{{ props.row.extranetIp }}</span>
+              </el-form-item>
+              <el-form-item label="服务器状态">
                       <span class="fa fa-circle"
                             v-bind:class="[{'text-green':props.row.status==1},{'text-danger':props.row.status==0}]">{{props.row.status==1 ? '开启':'关闭'}}</span>
-                    </el-form-item>
-                    <el-form-item label="到期时间">
-                      <span>{{ formatDate(props.row.endTime) }}</span>
-                    </el-form-item>
-                    <el-form-item label="创建者">
-                      <span>{{ props.row.creator }}</span>
-                    </el-form-item>
-                    <el-form-item label="更新者">
-                      <span>{{ props.row.updater }}</span>
-                    </el-form-item>
-                    <el-form-item label="更新时间">
-                      <span>{{ formatDate(props.row.updateDate) }}</span>
-                    </el-form-item>
-                    <el-form-item label="启用状态">
+              </el-form-item>
+              <el-form-item label="到期时间">
+                <span>{{ formatDate(props.row.endTime) }}</span>
+              </el-form-item>
+              <el-form-item label="创建者">
+                <span>{{ props.row.creator }}</span>
+              </el-form-item>
+              <el-form-item label="更新者">
+                <span>{{ props.row.updater }}</span>
+              </el-form-item>
+              <el-form-item label="更新时间">
+                <span>{{ formatDate(props.row.updateDate) }}</span>
+              </el-form-item>
+              <el-form-item label="启用状态">
                       <span class="fa fa-circle"
                             v-bind:class="[{'text-green':props.row.flag==1},{'text-danger':props.row.flag==0}]">{{props.row.flag==1 ? '开启':'关闭'}}</span>
-                      <!--<i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>-->
-                    </el-form-item>
-                    <el-form-item label="标签">
-                      <span>{{ props.row.tag }}</span>
-                    </el-form-item>
-                  </el-form>
-                </template>
-              </el-table-column>
-              <el-table-column
-                type="index">
-              </el-table-column>
-              <el-table-column
-                label="服务器"
-                prop="category"
-                :formatter="formatCategory">
-              </el-table-column>
-              <el-table-column
-                label="所属系统"
-                prop="osname">
-              </el-table-column>
-              <el-table-column
-                label="状态">
-                <template slot-scope="scope">
-                  <i class="fa fa-circle text-green" v-if="scope.row.status==1"/><i class="fa fa-circle text-danger"
-                                                                                    v-if="scope.row.status==0"/>
-                </template>
-              </el-table-column>
-              <el-table-column
-                :class-name="'hidden-xs'"
-                label="标签"
-                prop="tag">
-                <template slot-scope="scope">
-                  <el-tag>{{scope.row.tag}}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="备注"
-                prop="remarks">
-              </el-table-column>
-              <el-table-column
-                label="操作">
-                <template slot-scope="scope">
-                  <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal"-->
-                  <!--data-target="#tableModal2"></a>-->
-                  <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>-->
-                  <el-button size="mini" @click="edit(scope.row)">编辑
-                  </el-button>
-                  <el-button size="mini" type="danger" @click="del(scope.row.businessId)">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+                <!--<i class="fa fa-circle"  v-bind:class="[{'text-success':item.flag==1},{'text-danger':item.flag==0}]"/>-->
+              </el-form-item>
+              <el-form-item label="标签">
+                <span>{{ props.row.tag }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column
+          type="index">
+        </el-table-column>
+        <el-table-column
+          label="服务器"
+          prop="category"
+          :formatter="formatCategory">
+        </el-table-column>
+        <el-table-column
+          label="所属系统"
+          prop="osname">
+        </el-table-column>
+        <el-table-column
+          label="状态">
+          <template slot-scope="scope">
+            <i class="fa fa-circle text-green" v-if="scope.row.status==1"/><i class="fa fa-circle text-danger"
+                                                                              v-if="scope.row.status==0"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :class-name="'hidden-xs'"
+          label="标签"
+          prop="tag">
+          <template slot-scope="scope">
+            <el-tag>{{scope.row.tag}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="备注"
+          prop="remarks">
+        </el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal"-->
+            <!--data-target="#tableModal2"></a>-->
+            <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>-->
+            <el-button size="mini" @click="edit(scope.row)">编辑
+            </el-button>
+            <el-button size="mini" type="danger" @click="del(scope.row.businessId)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-            <div aria-label="..." class="pull-right nav-pageing">
-              <el-pagination
-                background
-                layout="prev, pager, next"
-                :pageSize="pageSize"
-                @current-change="handleCurrentChange"
-                :total="total">
-              </el-pagination>
-            </div>
-            <!-- /.box-body -->
-          </div>
-        </div>
+      <div aria-label="..." class="pull-right nav-pageing">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :pageSize="pageSize"
+          @current-change="handleCurrentChange"
+          :total="total">
+        </el-pagination>
       </div>
-      <!-- 新增弹出框modal -->
-      <div class="modal fade" id="tableModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="resetForm">
-                <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">新增弹出框</h4>
-            </div>
-            <div class="modal-body">
-              <!-- Horizontal Form -->
-              <div class="box box-info">
-                <el-form :model="tableForm" :rules="rules" ref="tableForm" label-width="100px" class="add-modalForm">
-                  <div class="box-body">
-                    <el-form-item label="所属系统" prop="businessId">
-                      <el-select v-model="tableForm.businessId" placeholder="请选择所属系统">
-                        <el-option
-                          v-for="item in osoptions"
-                          v-if="item.businessId!=' '"
-                          :key="item.businessId"
-                          :label="item.name"
-                          :value="item.businessId">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="品牌" prop="brand">
-                      <el-input v-model="tableForm.brand"></el-input>
-                    </el-form-item>
-                    <el-form-item label="服务器" prop="category">
-                      <el-select v-model="tableForm.category" placeholder="请选择服务器 ">
-                        <el-option v-for="item in categoryoptions" v-if="item.category!=' '"
-                                    :key="item.category" :label="item.label"
-                                   :value="item.category">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="CPU" prop="cpu">
-                      <el-input v-model="tableForm.cpu"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标签" prop="tag">
-                      <el-input v-model="tableForm.tag"></el-input>
-                    </el-form-item>
-                    <el-form-item label="带宽" prop="broadband">
-                      <el-input v-model="tableForm.broadband"></el-input>
-                    </el-form-item>
-                    <el-form-item label="硬盘" prop="disk">
-                      <el-input v-model="tableForm.disk"></el-input>
-                    </el-form-item>
-                    <el-form-item label="外网IP" prop="extranetIp">
-                      <el-input v-model="tableForm.extranetIp"></el-input>
-                    </el-form-item>
-                    <el-form-item label="内网IP" prop="intranetIp">
-                      <el-input v-model="tableForm.intranetIp"></el-input>
-                    </el-form-item>
-                    <el-form-item label="内存" prop="memory">
-                      <el-input v-model="tableForm.memory"></el-input>
-                    </el-form-item>
-                    <el-form-item label="到期时间" prop="endTime">
-                      <el-date-picker v-model="tableForm.endTime" type="datetime" placeholder="选择日期时间"
-                                      value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="状态" prop="status">
-                      <el-radio-group v-model="tableForm.status" size="medium">
-                        <el-radio-button label="1">开启</el-radio-button>
-                        <el-radio-button label="0">关闭</el-radio-button>
-                      </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="备注" prop="remarks">
-                      <el-input type="textarea" v-model="tableForm.remarks"></el-input>
-                    </el-form-item>
-                    <!--<el-form-item>
-                                <el-button type="primary" @click="submitForm">添加</el-button>
-                                <el-button @click="resetForm('tableForm')">重置</el-button>
-                            </el-form-item>-->
-                  </div>
-                </el-form>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm">取 消</button>
-              <input type="button" class="btn btn-primary" @click="add" value="保 存">
-            </div>
+      <!-- /.box-body -->
+    </div>
+    </div>
+    </div>
+    <!-- 新增弹出框modal -->
+    <div class="modal fade" id="tableModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="resetForm">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">新增弹出框</h4>
           </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-
-      <!-- 修改弹出框modal -->
-      <div class="modal fade" id="tableModal2">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="resetForm">
-                <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title">修改弹出框</h4>
-            </div>
-            <div class="modal-body">
-              <!-- Horizontal Form -->
-              <div class="box box-info">
-                <!-- form start -->
-                <el-form :model="tableForm" :rules="rules" ref="tableForm2" label-width="100px" class="edit-modalForm">
-                  <el-form-item label="所属系统" prop="name">
-                    <el-select v-model="tableForm.name" placeholder="请选择所属系统">
+          <div class="modal-body">
+            <!-- Horizontal Form -->
+            <div class="box box-info">
+              <el-form :model="tableForm" :rules="rules" ref="tableForm" label-width="100px" class="add-modalForm">
+                <div class="box-body">
+                  <el-form-item label="所属系统" prop="businessId">
+                    <el-select v-model="tableForm.businessId" placeholder="请选择所属系统">
                       <el-option
                         v-for="item in osoptions"
                         v-if="item.businessId!=' '"
-                        :key="item.name"
+                        :key="item.businessId"
                         :label="item.name"
-                        :value="item.name">
+                        :value="item.businessId">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -323,7 +218,7 @@
                   <el-form-item label="内存" prop="memory">
                     <el-input v-model="tableForm.memory"></el-input>
                   </el-form-item>
-                  <el-form-item label="到期时间" prop="endTime" required>
+                  <el-form-item label="到期时间" prop="endTime">
                     <el-date-picker v-model="tableForm.endTime" type="datetime" placeholder="选择日期时间"
                                     value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
@@ -336,18 +231,106 @@
                   <el-form-item label="备注" prop="remarks">
                     <el-input type="textarea" v-model="tableForm.remarks"></el-input>
                   </el-form-item>
-                </el-form>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm">取 消</button>
-              <button type="button" class="btn btn-primary" @click="modify">保 存</button>
+                  <!--<el-form-item>
+                              <el-button type="primary" @click="submitForm">添加</el-button>
+                              <el-button @click="resetForm('tableForm')">重置</el-button>
+                          </el-form-item>-->
+                </div>
+              </el-form>
             </div>
           </div>
-          <!-- /.modal-content -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm">取 消</button>
+            <input type="button" class="btn btn-primary" @click="add" value="保 存">
+          </div>
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
       </div>
+      <!-- /.modal-dialog -->
+    </div>
+
+    <!-- 修改弹出框modal -->
+    <div class="modal fade" id="tableModal2">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="resetForm">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">修改弹出框</h4>
+          </div>
+          <div class="modal-body">
+            <!-- Horizontal Form -->
+            <div class="box box-info">
+              <!-- form start -->
+              <el-form :model="tableForm" :rules="rules" ref="tableForm2" label-width="100px" class="edit-modalForm">
+                <el-form-item label="所属系统" prop="name">
+                  <el-select v-model="tableForm.name" placeholder="请选择所属系统">
+                    <el-option
+                      v-for="item in osoptions"
+                      v-if="item.businessId!=' '"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="品牌" prop="brand">
+                  <el-input v-model="tableForm.brand"></el-input>
+                </el-form-item>
+                <el-form-item label="服务器" prop="category">
+                  <el-select v-model="tableForm.category" placeholder="请选择服务器 ">
+                    <el-option v-for="item in categoryoptions" v-if="item.category!=' '"
+                               :key="item.category" :label="item.label"
+                               :value="item.category">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="CPU" prop="cpu">
+                  <el-input v-model="tableForm.cpu"></el-input>
+                </el-form-item>
+                <el-form-item label="标签" prop="tag">
+                  <el-input v-model="tableForm.tag"></el-input>
+                </el-form-item>
+                <el-form-item label="带宽" prop="broadband">
+                  <el-input v-model="tableForm.broadband"></el-input>
+                </el-form-item>
+                <el-form-item label="硬盘" prop="disk">
+                  <el-input v-model="tableForm.disk"></el-input>
+                </el-form-item>
+                <el-form-item label="外网IP" prop="extranetIp">
+                  <el-input v-model="tableForm.extranetIp"></el-input>
+                </el-form-item>
+                <el-form-item label="内网IP" prop="intranetIp">
+                  <el-input v-model="tableForm.intranetIp"></el-input>
+                </el-form-item>
+                <el-form-item label="内存" prop="memory">
+                  <el-input v-model="tableForm.memory"></el-input>
+                </el-form-item>
+                <el-form-item label="到期时间" prop="endTime" required>
+                  <el-date-picker v-model="tableForm.endTime" type="datetime" placeholder="选择日期时间"
+                                  value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="状态" prop="status">
+                  <el-radio-group v-model="tableForm.status" size="medium">
+                    <el-radio-button label="1">开启</el-radio-button>
+                    <el-radio-button label="0">关闭</el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="备注" prop="remarks">
+                  <el-input type="textarea" v-model="tableForm.remarks"></el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm">取 消</button>
+            <button type="button" class="btn btn-primary" @click="modify">保 存</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
     </div>
   </section>
 </template>
@@ -381,7 +364,7 @@
           }, {
             category: '3',
             label: '其他服务器'
-          },{
+          }, {
             category: ' ',
             label: '所有服务器'
           },
@@ -643,9 +626,9 @@
         this.tableForm.endTime = this.formatDate2(item.endTime);
         this.tableForm.status = item.status;
         this.tableForm.businessId = item.businessId;
-        this.tableForm.category=item.category;
+        this.tableForm.category = item.category;
 
-        this.$router.push({path:'editservertable',name:'EditServerTable',params:{tableForm:this.tableForm}});
+        this.$router.push({path: 'editservertable', name: 'EditServerTable', params: {tableForm: this.tableForm}});
       },
       modify() {
         this.$refs['tableForm2'].validate((valid) => {
@@ -824,7 +807,7 @@
           });
         })
       },
-      skip(a){
+      skip(a) {
         this.$router.push(a)
       }
 

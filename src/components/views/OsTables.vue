@@ -4,15 +4,13 @@
 
 <template>
   <section class="content">
-    <div class="row center-block">
+    <div class=" center-block header">
       <div class="col-md-12">
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">操作系统列表</h3>
             <div class="pull-right">
               <el-button type="primary" size="medium" @click="resetRuleForm" data-toggle="modal" data-target="#tableModal" style="margin-top: 2px">新增</el-button>
             </div>
-          </div>
+      </div>
+    </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive" style="height: 100%;">
             <el-table id="example2" class="table table-bordered table-hover" :data="tableData" style="">
@@ -86,8 +84,7 @@
             </div>
             <!-- /.box-body -->
           </div>
-        </div>
-      </div>
+
       <!-- 新增modal -->
       <div class="modal fade" id="tableModal">
         <div class="modal-dialog">
