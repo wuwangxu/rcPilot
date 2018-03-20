@@ -13,6 +13,8 @@ import ReposView from './components/views/Repos.vue'
 import OsTablesView from './components/views/OsTables'
 import ServerTablesView from './components/views/ServerTables'
 import UsersView from './components/views/Users.vue'
+import AddServerTable from './components/views/AddServerTable'
+import EditServerTable from './components/views/EditServerTable'
 
 // Routes
 const routes = [
@@ -41,42 +43,50 @@ const routes = [
         path: 'tables',
         component: TablesView,
         name: 'Tables',
-        meta: {description: 'Simple and advance table in CoPilot', requiresAuth: true }
+        meta: {description: 'Simple and advance table in CoPilot', requiresAuth: true}
       }, {
         path: 'ostables',
         component: OsTablesView,
         name: 'OsTables',
-        meta: {description: 'Os table in CoPilot', requiresAuth: true }
-      },{
+        meta: {description: 'Os table in CoPilot', requiresAuth: true}
+      }, {
         path: 'servertables',
         component: ServerTablesView,
         name: 'ServerTables',
-        meta: {description: 'Server table in CoPilot', requiresAuth: true }
-      },  {
+        meta: {description: 'Server table in CoPilot', requiresAuth: true}
+      }, {
+        path: 'addservertable',
+        component: AddServerTable,
+        name: 'AddServerTable'
+      }, {
+        path: 'editservertable',
+        component: EditServerTable,
+        name: 'EditServerTable'
+      }, {
         path: 'tasks',
         component: TasksView,
         name: 'Tasks',
-        meta: {description: 'Tasks page in the form of a timeline',  requiresAuth: true }
+        meta: {description: 'Tasks page in the form of a timeline', requiresAuth: true}
       }, {
         path: 'setting',
         component: SettingView,
         name: 'Settings',
-        meta: {description: 'User settings page',  requiresAuth: true }
+        meta: {description: 'User settings page', requiresAuth: true}
       }, {
         path: 'access',
         component: AccessView,
         name: 'Access',
-        meta: {description: 'Example of using maps',  requiresAuth: true}
+        meta: {description: 'Example of using maps', requiresAuth: true}
       }, {
         path: 'server',
         component: ServerView,
         name: 'Servers',
-        meta: {description: 'List of our servers',  requiresAuth: true }
+        meta: {description: 'List of our servers', requiresAuth: true}
       }, {
         path: 'repos',
         component: ReposView,
         name: 'Repository',
-        meta: {description: 'List of popular javascript repos',  requiresAuth: true   }
+        meta: {description: 'List of popular javascript repos', requiresAuth: true}
       }
     ]
   }, {

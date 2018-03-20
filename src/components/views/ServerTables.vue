@@ -1,7 +1,3 @@
-<!--
-在超小屏幕  手机 (<768px) 隐藏  标签
--->
-
 <template>
   <section class="content">
     <div class="row center-block">
@@ -55,9 +51,12 @@
                 <!--<button class="btn btn-primary btn-sm fa fa-plus" data-toggle="modal" data-target="#tableModal"-->
                 <!--@click="getOsData" style="margin-top: 19px"> 新增-->
                 <!--</button>-->
-                <el-button type="primary" size="medium" @click="getOsData" data-toggle="modal" data-target="#tableModal"
-                           style="margin-top: 2px">新增
-                </el-button>
+                <!--<el-button type="primary" size="medium" @click="getOsData" data-toggle="modal" data-target="#tableModal"-->
+                           <!--style="margin-top: 2px">新增-->
+                <!--</el-button>-->
+
+                <el-button type="primary" size="medium" @click="skip('addservertable')">新增</el-button>
+
               </div>
             </div>
           </div>
@@ -159,7 +158,7 @@
                   <!--<a class="btn btn-primary btn-sm fa fa-edit" title="编辑" @click="edit(scope.row)" data-toggle="modal"-->
                   <!--data-target="#tableModal2"></a>-->
                   <!--<a class="btn btn-danger btn-sm fa fa-bitbucket" title="删除" @click="del(scope.row.businessId)"></a>-->
-                  <el-button size="mini" @click="edit(scope.row)" data-toggle="modal" data-target="#tableModal2">编辑
+                  <el-button size="mini" @click="edit(scope.row)">编辑
                   </el-button>
                   <el-button size="mini" type="danger" @click="del(scope.row.businessId)">删除</el-button>
                 </template>
@@ -167,26 +166,6 @@
             </el-table>
 
             <div aria-label="..." class="pull-right nav-pageing">
-              <!--<ul class="pagination">-->
-              <!--<li class="page-item"-->
-              <!--:class="{disabled:pageNu===1}"-->
-              <!--:disabled="pageNu===0"-->
-              <!--@click="lastTab">-->
-              <!--<a class="page-link" tabindex="-1">上一页</a>-->
-              <!--</li>-->
-              <!--<li v-for="(item,index) in pages"-->
-              <!--class="page-item"-->
-              <!--:class="{active:pageNu===index+1}"-->
-              <!--@click="toggleTabs(index)">-->
-              <!--<a class="page-link">{{index+1}}</a>-->
-              <!--</li>-->
-              <!--<li class="page-item"-->
-              <!--:class="{disabled:pageNu===pages}"-->
-              <!--:disabled="{disabled:pageNu===pages}"-->
-              <!--@click="nextTab">-->
-              <!--<a class="page-link">下一页</a>-->
-              <!--</li>-->
-              <!--</ul>-->
               <el-pagination
                 background
                 layout="prev, pager, next"
@@ -531,7 +510,7 @@
           // sort:'seq'
         }, res => {
           this.tableData = res.rows;
-          console.log(this.tableData);
+          // console.log(this.tableData);
           this.pages = Math.ceil(res.total / this.pageSize);
           this.total = res.total;
           loading.close();
@@ -569,7 +548,7 @@
               endTime: this.formatDate3(this.tableForm.endTime),//"endTime": 1516166358000
               status: this.tableForm.status
             }, res => {
-              console.log(res)
+              // console.log(res)
               if (res.code === 200) {
                 loading.close();
 
@@ -651,9 +630,8 @@
       //修改
       edit(item) {
         // console.log(item)
-        this.tableForm.name = item.name;
+        this.tableForm.name = item.osname;
         this.tableForm.brand = item.brand;
-        // this.tableForm.category=item.category;
         this.tableForm.cpu = item.cpu;
         this.tableForm.tag = item.tag;
         this.tableForm.broadband = item.broadband;
@@ -665,20 +643,9 @@
         this.tableForm.endTime = this.formatDate2(item.endTime);
         this.tableForm.status = item.status;
         this.tableForm.businessId = item.businessId;
-        // console.log(this.tableForm)
+        this.tableForm.category=item.category;
 
-        // this.tableForm.code = item.code;
-        // // this.tableForm.isTop = item.isTop;
-        // // this.tableForm.seq = item.seq;
-        // // this.tableForm.parent = item.parentId;
-        // this.tableForm.remarks = item.remarks;
-        // this.tableForm.createBy = item.createBy;
-        // this.tableForm.createDate = item.createDate;
-        // this.tableForm.updateBy = item.updateBy;
-        // this.tableForm.updateDate = item.updateDate;
-        // this.tableForm.flag = item.flag;
-
-        // console.log(item);
+        this.$router.push({path:'editservertable',name:'EditServerTable',params:{tableForm:this.tableForm}});
       },
       modify() {
         this.$refs['tableForm2'].validate((valid) => {
@@ -857,6 +824,9 @@
           });
         })
       },
+      skip(a){
+        this.$router.push(a)
+      }
 
     },
     computed: {}
