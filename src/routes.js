@@ -12,7 +12,9 @@ import ServerView from './components/views/Server.vue'
 import ReposView from './components/views/Repos.vue'
 import OsTablesView from './components/views/OsTables'
 import ServerTablesView from './components/views/ServerTables'
-import UsersView from './components/views/Users.vue'
+import UsersView from './components/views/user/Users.vue'
+import addNewView from  './components/views/user/addNew.vue'
+import EditView from  './components/views/user/Edit.vue'
 
 // Routes
 const routes = [
@@ -29,9 +31,22 @@ const routes = [
         path: 'users',
         alias: '',
         component: UsersView,
-        name: 'Users',
-        meta: {description: 'Overview of environment', requiresAuth: true}
+        name: '用户信息',
+        meta: {description: ' ', requiresAuth: true}
       }, {
+        path: 'addnew',
+        alias: '',
+        component: addNewView,
+        name: 'addnew',
+        // meta: {description: ' ', requiresAuth: true}
+      },{
+        path: 'edit',
+        alias: '',
+        component: EditView,
+        name: 'edit',
+        // meta: {description: ' ', requiresAuth: true}
+      },
+      {
         path: 'dashboard',
         alias: '',
         component: DashboardView,

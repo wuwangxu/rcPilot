@@ -2,18 +2,18 @@
   <ul class="sidebar-menu">
     <li class="header">Users</li>
     <li class="treeview">
-      <a href="#">
-        <i ></i>
-        <span class="fa fa-user-o">用户管理</span>
+      <a>
+        <i class="fa fa-user-o"></i>
+        <span>用户管理</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left fa-fw pull-right"></i>
         </span>
       </a>
       <ul class="treeview-menu">
         <li>
-          <a href="#">
+          <a>
           <router-link tag="li" class="pageLink" to="/users">
-            <i class="fa fa-user-o "></i> 用户信息
+            <i class="fa fa-user-o"></i> 用户信息
           </router-link>
           </a>
         </li>
@@ -24,7 +24,7 @@
 
     <li class="header">WangXuAdd</li>
     <li class="treeview">
-      <a href="#">
+      <a>
         <i class="fa fa-folder-o"></i>
         <span>OS</span>
         <span class="pull-right-container">
@@ -34,7 +34,7 @@
       <ul class="treeview-menu">
         <li>
 
-          <a href="#">
+          <a>
             <router-link tag="li" class="pageLink" to="/ostables">
             <i class="fa fa-tasks"></i> 操作系统
             </router-link>
@@ -42,14 +42,14 @@
 
         </li>
         <li>
-          <a href="#">
+          <a>
             <router-link tag="li" class="pageLink" to="/servertables">
               <i class="fa fa-file-picture-o"></i> 服务器
             </router-link>
           </a>
         </li>
         <li>
-        <a href="#">
+        <a>
           <router-link tag="li" class="pageLink" to="/">
             <i class="fa fa-file-picture-o"></i> table2
           </router-link>
@@ -150,7 +150,10 @@
 </template>
 <script>
 export default {
-  name: 'SidebarMenu'
+  name: 'SidebarMenu',
+  mounted(){
+
+  }
 }
 </script>
 <style>
@@ -159,17 +162,17 @@ export default {
     padding: 12px 15px 12px 15px;
   }
 
-  .sidebar-menu li.active>a>.fa-angle-left, .sidebar-menu li.active>a>.pull-right-container>.fa-angle-left {
-    animation-name: rotate;
-    animation-duration: .2s;
+  .sidebar-menu li.active>a>.fa-angle-left,
+  .sidebar-menu li.active>a>.pull-right-container>.fa-angle-left{
+    animation-name: rotateIcon;
+    animation-duration: .5s;
     animation-fill-mode: forwards;
   }
 
-  @keyframes rotate {
+  @keyframes rotateIcon {
     0% {
       transform: rotate(0deg);
     }
-
     100% {
       transform: rotate(-90deg);
     }

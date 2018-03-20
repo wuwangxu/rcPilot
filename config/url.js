@@ -3,7 +3,7 @@
  */
 //  开发环境配置
 const devIp = '192.168.1.147'  //  服务器IP地址
-const devInterfacePORT = '8082'  //  服务器接口访问端口
+const devInterfacePORT = '8083'  //  服务器接口访问端口
 const devAssetsPORT = '8888' //  服务器静态资源访问端口
 const devWebSocketPORT = '8997' //  服务器WS服务访问端口
 

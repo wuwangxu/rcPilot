@@ -123,16 +123,11 @@
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
                 <span class="hidden-xs">{{ demo.displayName }}</span>
               </a>
-              <ul class="dropdown-menu" id="ul-my">
-                <li>
-                  <!--<div class="pull-left">-->
-                    <!--<a href="#" class="">Profile</a>-->
-                  <!--</div>-->
-                <div class="pull-right">
-                  <a class="logout" @click="logOut">退 出</a>
-                </div>
-                </li>
-              </ul>
+
+            </li>
+            <!--logout Menu-->
+            <li class="dropdown logout logout-menu">
+              <a class="logout" @click="logOut" title="退 出"><img src="../../static/img/logout.svg" style="width:18px; height:18px;" ></a>
             </li>
           </ul>
         </div>
@@ -163,10 +158,10 @@
     <!-- /.content-wrapper -->
 
     <!-- Main Footer -->
-    <footer class="main-footer">
-      <strong>Copyright &copy; {{year}}
-        <a href="javascript:;">CoPilot</a>.</strong> All rights reserved.
-    </footer>
+    <!--<footer class="main-footer">-->
+      <!--<strong>Copyright &copy; {{year}}-->
+        <!--<a href="javascript:;">CoPilot</a>.</strong> All rights reserved.-->
+    <!--</footer>-->
   </div>
   <!-- ./wrapper -->
 </template>
@@ -285,20 +280,27 @@ hr.visible-xs-block {
   /*width: 157px !important;*/
 /*}*/
 .dropdown-menu{
-  background-color: #367fa9 !important;
+  /*background-color: #367fa9 !important;*/
   max-width: 156px !important;
   height: 35px;
   color: white;
-  left:0 !important;
+  /*left:0 !important;*/
+}
+.dropdown-menu li{
+
+  height:20px;
 }
   .logout{
     color: #dbddde;
     font-size: 12px;
     display: inline-block;
     position: absolute;
-    top: 50%;
-    left: 22.38%;
+    top: 80%;
+    /*left: 22.38%;*/
     height: 1em;
     margin-top: -0.5em;
+  }
+  .logout:hover{
+    cursor: pointer;
   }
 </style>
