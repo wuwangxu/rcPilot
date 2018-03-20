@@ -265,17 +265,17 @@
           this.tableForm.unworkdate = ''
       },
       //查重
-      checkRepect(){
-        login_name:this.tableForm.loginName,
-
-        this.pilot.ajaxGetUtil('/bUser/validate/'+login_name+emp_id,{
-
-          },res=>{
-
-        },err=>{
-
-          })
-      }
+//      checkRepect(){
+//        login_name:this.tableForm.loginName,
+//
+//        this.pilot.ajaxGetUtil('/bUser/validate/'+login_name+emp_id,{
+//
+//          },res=>{
+//
+//        },err=>{
+//
+//          })
+//      }
     },
     components: {
     },
