@@ -62,6 +62,7 @@ module.exports={
    */
     ajaxPostUtil (url,param,thenFun,exeFun){
     var _formData = formData(param);
+    // console.log(param);
     axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
     axios.post(preUrl.interfaceUrl+url,_formData).then(function (res) {
       thenFun.call(this,res.data);
@@ -151,6 +152,8 @@ module.exports={
    * @date: create on 2017-12-18 15:48:35
    */
   ajaxPutUtil (url,param,thenFun,exeFun){
+
+    console.log(param)
     axios.defaults.headers.common['Authorization']=sessionStorage.getItem("token")||localStorage.getItem("token")
     axios({
       method: 'put',
